@@ -102,11 +102,7 @@
           linear-gradient(90deg, rgba(169,152,120,.12) 1px, transparent 1px) 0 0/34px 100%,
           var(--bg);
       }
-      body::before{
-        content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.42;
-        background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
-        mix-blend-mode:multiply;
-      }
+      body::before{content:none;}
       /* Spine bookmark */
       body::after{
         content:'';position:fixed;left:18px;top:70px;bottom:18px;width:18px;z-index:-1;border-radius:12px;
@@ -123,7 +119,7 @@
         position:sticky;top:0;z-index:100;
         display:grid;grid-template-columns:220px 1fr auto;
         align-items:center;gap:22px;min-height:54px;padding:7px 16px;
-        background:rgba(248,242,229,.88);backdrop-filter:blur(14px);
+        background:rgba(248,242,229,.94);
         border-bottom:1px solid var(--bo);
         box-shadow:0 8px 28px rgba(75,59,34,.08);
         transition:background .35s,border-color .35s;
@@ -164,10 +160,16 @@
       /* ── HERO ── */
       .hero{
         min-height:calc(100vh - 54px);
-        display:flex;flex-direction:column;justify-content:center;
         padding:76px 56px 56px 70px;
         border-bottom:1px solid var(--bo);
         position:relative;overflow:hidden;
+      }
+      .hero-shell{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(360px,520px);
+        gap:28px;
+        align-items:center;
+        min-height:calc(100vh - 186px);
       }
       /* Garden OS Demo label */
       .hero::before{
@@ -226,13 +228,13 @@
       }
 
       /* ── DRAGGABLE WIDGETS ── */
-      .hero-widgets{position:absolute;inset:0;pointer-events:none;z-index:6;}
+      .hero-widgets{position:absolute;inset:0;pointer-events:none;z-index:3;}
       .dwidget{
         position:absolute;pointer-events:all;
         background:rgba(248,242,229,.93);
         border:1px solid var(--bo);border-radius:9px;
         box-shadow:var(--shadow),var(--tight);
-        overflow:hidden;backdrop-filter:blur(12px);
+        overflow:hidden;
         user-select:none;transition:box-shadow .15s;min-width:200px;
       }
       :root.dark .dwidget{background:rgba(51,46,37,.93);}
@@ -312,6 +314,8 @@
         border:1px solid var(--bo);border-radius:9px;
         background:rgba(248,242,229,.78);
         box-shadow:var(--shadow),var(--tight);position:relative;
+        content-visibility:auto;
+        contain-intrinsic-size:900px;
       }
       :root.dark .section{background:rgba(51,46,37,.82);}
       .section::before{
@@ -475,7 +479,9 @@
         .hero{padding:54px 20px 42px 30px;}
         .hero::before{left:30px;}
         .hero::after{display:none;}
-        .hero-windows{position:relative;right:auto;bottom:auto;width:100%;margin-top:24px;grid-template-columns:1fr 1fr;}
+        .hero-shell{grid-template-columns:1fr;}
+        .hero-stage{grid-template-rows:auto auto;}
+        .hero-playfield{min-height:280px;}
         .section,footer{margin-left:20px;}
         .about-grid,.contact-grid{grid-template-columns:1fr;gap:18px;}
         .skill-group{grid-template-columns:1fr;gap:12px;}
@@ -493,11 +499,17 @@
 
       /* ── HERO CAROUSEL ── */
       .hero-carousel{
-        position:absolute;right:0;top:0;bottom:0;
-        width:min(52%,620px);
+        position:relative;
+        width:100%;
+        height:248px;
         overflow:hidden;
         display:flex;flex-direction:column;
+        border:1px solid var(--bo);
+        border-radius:18px;
+        background:rgba(248,242,229,.92);
+        box-shadow:var(--shadow),var(--tight);
       }
+      :root.dark .hero-carousel{background:rgba(51,46,37,.92);}
       .hc-track{
         display:flex;height:100%;
         transition:transform .6s cubic-bezier(.4,0,.2,1);
@@ -515,11 +527,11 @@
       .hc-slide::before{
         content:'';
         position:absolute;inset:0;z-index:1;
-        background:linear-gradient(90deg,var(--bg) 0%,rgba(239,231,212,.7) 22%,transparent 55%);
+        background:linear-gradient(180deg,rgba(248,242,229,.08),rgba(47,41,31,.18));
         pointer-events:none;
       }
       :root.dark .hc-slide::before{
-        background:linear-gradient(90deg,var(--bg) 0%,rgba(39,35,29,.7) 22%,transparent 55%);
+        background:linear-gradient(180deg,rgba(51,46,37,.08),rgba(0,0,0,.18));
       }
       /* pill overlay bottom-right */
       .hc-info{
@@ -529,9 +541,8 @@
       .hc-title-pill{
         font-family:var(--mono);font-size:10px;letter-spacing:.06em;
         padding:6px 10px;border-radius:6px;
-        background:rgba(248,242,229,.88);color:var(--ink);
+        background:rgba(248,242,229,.94);color:var(--ink);
         border:1px solid var(--bo);box-shadow:var(--shadow);
-        backdrop-filter:blur(8px);
       }
       :root.dark .hc-title-pill{background:rgba(51,46,37,.88);}
       .hc-label-pill{
@@ -553,7 +564,7 @@
       }
       /* controls */
       .hc-controls{
-        position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+        position:absolute;bottom:16px;left:20px;
         z-index:3;display:flex;align-items:center;gap:8px;
       }
       .hc-dot{
@@ -563,53 +574,60 @@
       }
       .hc-dot.on{background:var(--ac);transform:scale(1.4);}
       .hc-arrow{
-        position:absolute;top:50%;transform:translateY(-50%);
+        position:absolute;top:18px;
         z-index:3;background:rgba(248,242,229,.82);
         border:1px solid var(--bo);border-radius:50%;
         width:34px;height:34px;
         display:flex;align-items:center;justify-content:center;
         cursor:pointer;font-size:16px;color:var(--ink2);
-        transition:all .2s;backdrop-filter:blur(8px);
+        transition:all .2s;
         box-shadow:var(--shadow);
       }
       :root.dark .hc-arrow{background:rgba(51,46,37,.82);}
       .hc-arrow:hover{background:var(--ac);color:#fff8ea;border-color:var(--ac);}
-      .hc-arrow.l{left:14px;} .hc-arrow.r{right:14px;}
-      /* thumbnail strip */
-      .hc-thumbs{
-        position:absolute;right:12px;top:50%;transform:translateY(-50%);
-        z-index:3;display:flex;flex-direction:column;gap:6px;
-      }
-      .hc-thumb{
-        width:44px;height:32px;border-radius:4px;
-        border:2px solid transparent;
-        overflow:hidden;cursor:pointer;
-        transition:border-color .2s,transform .2s;
-        background:var(--sur2);
-        opacity:.55;
-      }
-      .hc-thumb.on{border-color:var(--ac);opacity:1;transform:scale(1.08);}
-      .hc-thumb:hover{opacity:.85;}
-      .hc-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-      .hc-thumb-icon{
-        width:100%;height:100%;
-        display:flex;align-items:center;justify-content:center;
-        font-size:16px;
-      }
+      .hc-arrow.l{right:58px;} .hc-arrow.r{right:18px;}
 
       /* Make hero layout work with carousel */
-      .hero{
+      .hero-left{position:relative;z-index:2;max-width:640px;}
+      .hero-stage{
+        position:relative;z-index:2;
+        display:grid;
+        grid-template-rows:minmax(320px,1fr) 248px;
+        gap:16px;
+      }
+      .hero-playfield{
         position:relative;
+        min-height:320px;
+        border:1px solid var(--bo);
+        border-radius:18px;
+        background:
+          linear-gradient(180deg,rgba(248,242,229,.92),rgba(232,222,199,.9)),
+          radial-gradient(circle at top right, rgba(123,156,160,.16), transparent 38%);
+        box-shadow:var(--shadow),var(--tight);
         overflow:hidden;
       }
-      .hero-left{
-        position:relative;z-index:2;
-        max-width:min(56%,640px);
+      :root.dark .hero-playfield{
+        background:
+          linear-gradient(180deg,rgba(51,46,37,.94),rgba(33,29,24,.92)),
+          radial-gradient(circle at top right, rgba(141,182,187,.12), transparent 42%);
+      }
+      .hero-playfield::before{
+        content:'widget playground';
+        position:absolute;
+        top:14px;
+        left:16px;
+        font-family:var(--mono);
+        font-size:9px;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        color:var(--mut);
       }
 
       @media(max-width:980px){
-        .hero-carousel{display:none;}
+        .hero-shell{grid-template-columns:1fr;}
+        .hero-stage{grid-template-rows:auto auto;}
         .hero-left{max-width:100%;}
+        .hero-playfield{min-height:280px;}
       }
     `;
 
@@ -851,9 +869,9 @@
         if (!dragging) return;
         const onMove = e => {
           const cl = e.touches ? e.touches[0] : e;
-          const hero = ref.current?.closest('.hero');
-          if (!hero) return;
-          const rect = hero.getBoundingClientRect();
+          const playfield = ref.current?.closest('.hero-playfield');
+          if (!playfield) return;
+          const rect = playfield.getBoundingClientRect();
           const ww = ref.current?.offsetWidth || 200;
           const wh = ref.current?.offsetHeight || 100;
           setPos({
@@ -920,9 +938,9 @@
     function DropZones({ dropped }) {
       // Zones live in the RIGHT half of the hero — safe from text
       const zones = [
-        { key:'status', label:'status.board', right:340, top:60,  w:130, h:54 },
-        { key:'tools',  label:'core.tools',   right:190, top:60,  w:110, h:54 },
-        { key:'map',    label:'project.map',  right:340, top:320, w:220, h:54 },
+        { key:'status', label:'status.board', left:24,  top:56,  w:154, h:58 },
+        { key:'tools',  label:'core.tools',   left:214, top:42,  w:136, h:58 },
+        { key:'map',    label:'project.map',  left:88,  top:216, w:226, h:58 },
       ];
       return (
         <>
@@ -935,7 +953,7 @@
                 data-key={z.key}
                 style={{
                   position:'absolute',
-                  right:z.right, top:z.top,
+                  left:z.left, top:z.top,
                   width:z.w, height:z.h,
                   border: done ? '2px solid var(--ac)' : '2px dashed var(--bos)',
                   borderRadius:9,
@@ -1035,12 +1053,13 @@
       };
 
       const s = HERO_SLIDES[idx];
-
-      // For OGAM slides, use the uploaded images from Claude context
-      const IMG_MAP = {
-        0: '/mnt/user-data/uploads/1777778886931_image.png',
-        1: '/mnt/user-data/uploads/1777778928827_image.png',
-      };
+      const heroThemes = [
+        'linear-gradient(135deg,#dfe7cf,#8fa66d)',
+        'linear-gradient(135deg,#d7ceb8,#8b7358)',
+        'linear-gradient(135deg,#e3dcc6,#9aaf88)',
+        'linear-gradient(135deg,#d6ddcf,#6d8658)',
+        'linear-gradient(135deg,#e6dac7,#bc8f59)',
+      ];
 
       return (
         <div
@@ -1061,13 +1080,13 @@
                   width:'100%',height:'100%',
                   display:'flex',flexDirection:'column',
                   alignItems:'center',justifyContent:'center',gap:16,
-                  background: sl.color,
+                  background: heroThemes[i % heroThemes.length],
                   position:'relative',
                 }}>
                   {/* decorative grid */}
                   <div style={{
                     position:'absolute',inset:0,
-                    backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
+                    backgroundImage:'linear-gradient(rgba(47,41,31,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(47,41,31,.05) 1px,transparent 1px)',
                     backgroundSize:'24px 24px',
                   }}/>
                   {/* decorative circle */}
@@ -1075,39 +1094,18 @@
                     position:'absolute',
                     width:'min(60%,280px)',aspectRatio:'1',
                     borderRadius:'50%',
-                    border:'1px dashed rgba(255,255,255,.12)',
+                    border:'1px dashed rgba(47,41,31,.16)',
                   }}/>
-                  <span style={{fontSize:56,filter:'drop-shadow(0 4px 20px rgba(0,0,0,.5))',position:'relative',zIndex:1}}>{sl.icon}</span>
-                  <span style={{fontFamily:'var(--mono)',fontSize:10,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(255,255,255,.45)',position:'relative',zIndex:1}}>{sl.label}</span>
+                  <span style={{fontSize:56,filter:'drop-shadow(0 4px 16px rgba(47,41,31,.18))',position:'relative',zIndex:1}}>{sl.icon}</span>
+                  <span style={{fontFamily:'var(--mono)',fontSize:10,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(47,41,31,.62)',position:'relative',zIndex:1}}>{sl.label}</span>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Left gradient — makes text readable */}
-          <div style={{
-            position:'absolute',inset:0,zIndex:1,pointerEvents:'none',
-            background:'linear-gradient(90deg,var(--bg) 0%,rgba(239,231,212,.65) 18%,transparent 46%)',
-          }}/>
 
           {/* Arrows */}
           <button className="hc-arrow l" aria-label="Slide anterior" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(-1);pause();resume();}}>‹</button>
           <button className="hc-arrow r" aria-label="Slide siguiente" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(1); pause();resume();}}>›</button>
-
-          {/* Thumbnail strip */}
-          <div className="hc-thumbs" style={{zIndex:4}}>
-            {HERO_SLIDES.map((sl,i) => (
-              <div
-                key={i}
-                className={`hc-thumb${i===idx?' on':''}`}
-                onClick={e=>{e.stopPropagation();setIdx(i);pause();resume();}}
-              >
-                <div className="hc-thumb-icon" style={{background:sl.color}}>
-                  <span style={{fontSize:14}}>{sl.icon}</span>
-                </div>
-              </div>
-            ))}
-          </div>
 
           {/* Info overlay */}
           <div className="hc-info" style={{zIndex:4}}>
@@ -1148,7 +1146,7 @@
                   backgroundImage:"linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)",
                   backgroundSize:"20px 20px"}}/>
                 {s.img
-                  ? <img src={s.img} alt={s.label} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
+                  ? <img src={s.img} alt={s.label} loading="lazy" decoding="async" referrerPolicy="no-referrer" style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
                   : <>
                       <span style={{fontSize:34,position:"relative",zIndex:1,filter:"drop-shadow(0 2px 8px rgba(0,0,0,.4))"}}>{s.icon}</span>
                       <span style={{fontFamily:"var(--mono)",fontSize:9,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",position:"relative",zIndex:1}}>{s.label}</span>
@@ -1206,9 +1204,9 @@
           <button className="btn-line" onClick={()=>setOpen(o=>!o)}>↓ {lang==="es"?"Descargar CV":lang==="pt"?"Baixar CV":"Download CV"} ▾</button>
           {open&&(
             <div className="cv-menu">
-              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_ES.docx" download>🇦🇷 Español</a>
-              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_EN.docx" download>🇺🇸 English</a>
-              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_PT.docx" download>🇧🇷 Português</a>
+              <a className="cv-opt" href="./cv/CV_Geronimo_Odriozola_ES.docx" download>🇦🇷 Español</a>
+              <a className="cv-opt" href="./cv/CV_Geronimo_Odriozola_EN.docx" download>🇺🇸 English</a>
+              <a className="cv-opt" href="./cv/CV_Geronimo_Odriozola_PT.docx" download>🇧🇷 Português</a>
             </div>
           )}
         </div>
@@ -1303,74 +1301,74 @@
           {/* HERO */}
           <section className="hero">
             <div className="hero-grain"/>
+            <div className="hero-shell">
+              <div className="hero-left">
+                <div className="avail fi"><div className="avail-dot"/>{t("Disponible para trabajar","Available for work","Disponível para trabalhar")}</div>
+                <p className="hero-overline fi fi1">Game Developer Jr. · C# / Unity / Godot · Buenos Aires 🇦🇷</p>
+                <h1 className="hero-name fi fi2">Geronimo<br/><em>Odriozola</em></h1>
+                <p className="hero-desc fi fi3">{t(
+                  <>Desarrollador de videojuegos <strong>en formación</strong> con base en C#, Unity y Godot. Mecánicas funcionales, sistemas de combate y generación procedural. Expandiéndome en QA Testing.</>,
+                  <>Game developer <strong>in training</strong> with a foundation in C#, Unity and Godot. Functional mechanics, combat systems, and procedural generation. Currently expanding into QA Testing.</>,
+                  <>Desenvolvedor de jogos <strong>em formação</strong> com base em C#, Unity e Godot. Mecânicas funcionais, sistemas de combate e geração procedural. Aprofundando-me em QA Testing.</>
+                )}</p>
+                <div className="hero-actions fi fi4">
+                  <a href="#proyectos" className="btn-fill">{t("Ver proyectos","See projects","Ver projetos")}</a>
+                  <CVDropdown lang={lang}/>
+                  <span className="hero-loc">{t("Remoto o Buenos Aires","Remote or Buenos Aires","Remoto ou Buenos Aires")}</span>
+                </div>
+              </div>
 
-            {/* Text content — clean, no widgets inside */}
-            <div className="hero-left">
-              <div className="avail fi"><div className="avail-dot"/>{t("Disponible para trabajar","Available for work","Disponível para trabalhar")}</div>
-              <p className="hero-overline fi fi1">Game Developer Jr. · C# / Unity / Godot · Buenos Aires 🇦🇷</p>
-              <h1 className="hero-name fi fi2">Geronimo<br/><em>Odriozola</em></h1>
-              <p className="hero-desc fi fi3">{t(
-                <>Desarrollador de videojuegos <strong>en formación</strong> con base en C#, Unity y Godot. Mecánicas funcionales, sistemas de combate y generación procedural. Expandiéndome en QA Testing.</>,
-                <>Game developer <strong>in training</strong> with a foundation in C#, Unity and Godot. Functional mechanics, combat systems, and procedural generation. Currently expanding into QA Testing.</>,
-                <>Desenvolvedor de jogos <strong>em formação</strong> com base em C#, Unity e Godot. Mecânicas funcionais, sistemas de combate e geração procedural. Aprofundando-me em QA Testing.</>
-              )}</p>
-              <div className="hero-actions fi fi4">
-                <a href="#proyectos" className="btn-fill">{t("Ver proyectos","See projects","Ver projetos")}</a>
-                <CVDropdown lang={lang}/>
-                <span className="hero-loc">{t("Remoto o Buenos Aires","Remote or Buenos Aires","Remoto ou Buenos Aires")}</span>
+              <div className="hero-stage">
+                <div className="hero-playfield">
+                  <div className="hero-widgets">
+                    <DropZones dropped={dropped}/>
+
+                    <DraggableWidget widgetKey="status" title="status.board" onDrop={handleDrop}
+                      defaultPos={{x:20, y:88}} style={{width:230,transform:"rotate(-1deg)"}}>
+                      {[
+                        [t("rol","role","função"),"Game Dev Jr."],
+                        ["location","Buenos Aires"],
+                        ["stack","Unity · C# · Godot"],
+                        ["QA","BairesDev · 2025"],
+                        [t("idiomas","languages","idiomas"),"ES · EN · PT"],
+                        [t("proyectos","projects","projetos"),"5 en portfolio"],
+                        [t("disponible","available","disponível"),t("Inmediata","Immediate","Imediata")],
+                      ].map(([k,v])=>(
+                        <div className="status-row" key={k}><span>{k}</span><strong>{v}</strong></div>
+                      ))}
+                    </DraggableWidget>
+
+                    <DraggableWidget widgetKey="tools" title="core.tools" onDrop={handleDrop}
+                      defaultPos={{x:244, y:104}} style={{width:184,transform:"rotate(1deg)"}}>
+                      <div className="mini-pills">
+                        {["Unity","C#","Godot 4","Blender","Git","QA","Scrum","VS Code"].map(n=>(
+                          <span className="mini-pill" key={n}>{n}</span>
+                        ))}
+                      </div>
+                    </DraggableWidget>
+
+                    <DraggableWidget widgetKey="map" title="project.map" onDrop={handleDrop}
+                      defaultPos={{x:88, y:202}} style={{width:260,transform:"rotate(.4deg)"}}>
+                      {PROJECTS.map(p=>(
+                        <div className="status-row" key={p.num}>
+                          <span style={{color:"var(--mut)",width:18,flexShrink:0}}>{p.num}</span>
+                          <span style={{flex:1}}>{p.title}</span>
+                          <span style={{
+                            fontSize:8,padding:"2px 6px",borderRadius:999,
+                            background:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"var(--ac)":"var(--sur2)",
+                            color:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"#fff8ea":"var(--mut)",
+                            border:"1px solid var(--bo)",flexShrink:0,
+                          }}>{lang==="es"?p.statusEs:p.statusEn}</span>
+                        </div>
+                      ))}
+                      <div className="mini-map"/>
+                    </DraggableWidget>
+                  </div>
+                </div>
+
+                <HeroCarousel lang={lang}/>
               </div>
             </div>
-
-            {/* Draggable widgets + drop zones */}
-            <div className="hero-widgets">
-
-              <DropZones dropped={dropped}/>
-
-              <DraggableWidget widgetKey="status" title="status.board" onDrop={handleDrop}
-                defaultPos={{x:520, y:60}} style={{width:230,transform:"rotate(-1deg)"}}>
-                {[
-                  [t("rol","role","função"),"Game Dev Jr."],
-                  ["location","Buenos Aires"],
-                  ["stack","Unity · C# · Godot"],
-                  ["QA","BairesDev · 2025"],
-                  [t("idiomas","languages","idiomas"),"ES · EN · PT"],
-                  [t("proyectos","projects","projetos"),"5 en portfolio"],
-                  [t("disponible","available","disponível"),t("Inmediata","Immediate","Imediata")],
-                ].map(([k,v])=>(
-                  <div className="status-row" key={k}><span>{k}</span><strong>{v}</strong></div>
-                ))}
-              </DraggableWidget>
-
-              <DraggableWidget widgetKey="tools" title="core.tools" onDrop={handleDrop}
-                defaultPos={{x:770, y:60}} style={{width:200,transform:"rotate(1.2deg)"}}>
-                <div className="mini-pills">
-                  {["Unity","C#","Godot 4","Blender","Git","QA","Scrum","VS Code"].map(n=>(
-                    <span className="mini-pill" key={n}>{n}</span>
-                  ))}
-                </div>
-              </DraggableWidget>
-
-              <DraggableWidget widgetKey="map" title="project.map" onDrop={handleDrop}
-                defaultPos={{x:520, y:340}} style={{width:260,transform:"rotate(.4deg)"}}>
-                {PROJECTS.map(p=>(
-                  <div className="status-row" key={p.num}>
-                    <span style={{color:"var(--mut)",width:18,flexShrink:0}}>{p.num}</span>
-                    <span style={{flex:1}}>{p.title}</span>
-                    <span style={{
-                      fontSize:8,padding:"2px 6px",borderRadius:999,
-                      background:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"var(--ac)":"var(--sur2)",
-                      color:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"#fff8ea":"var(--mut)",
-                      border:"1px solid var(--bo)",flexShrink:0,
-                    }}>{lang==="es"?p.statusEs:p.statusEn}</span>
-                  </div>
-                ))}
-                <div className="mini-map"/>
-              </DraggableWidget>
-
-            </div>
-
-            {/* Carousel — right side, desktop only */}
-            <HeroCarousel lang={lang}/>
           </section>
 
           {/* ABOUT */}
