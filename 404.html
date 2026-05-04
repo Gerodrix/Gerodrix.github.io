@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Geronimo Odriozola</title>
+  <script>
+    // GitHub Pages SPA redirect trick
+    // Redirects 404s back to index.html preserving the hash
+    const path = window.location.pathname;
+    window.location.replace('/' + window.location.search + '#' + path.slice(1));
+  </script>
+</head>
+<body></body>
+</html>

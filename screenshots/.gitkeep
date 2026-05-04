@@ -1,0 +1,6 @@
+# Carpeta para screenshots de proyectos
+# Subir aquí las imágenes del juego para agregarlas a los sliders
+# Formatos recomendados: PNG o JPG, 16:9, mínimo 800px de ancho
+# 
+# Ejemplo de uso en index.html:
+#   { img: "./screenshots/dungeon-gameplay.png", label: "Gameplay" }

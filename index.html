@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geronimo Odriozola — Game Developer</title>
+  <meta name="description" content="Portfolio de Geronimo Odriozola — Game Developer Jr. Unity, C#, Godot, Buenos Aires."/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body,#root{min-height:100vh;}
+    body{background:#efe7d4;overflow-x:hidden;}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    /* ═══════════════════════════════════════
+       CSS — exact garden-os.css
+    ═══════════════════════════════════════ */
+    const CSS = `
+      @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+      :root {
+        --bg:#efe7d4; --sur:#f8f2e5; --sur2:#e8dec7;
+        --ink:#2f291f; --ink2:#5d5345; --mut:#9a8c76;
+        --ac:#5f7747; --ac2:#b9793e; --ac3:#7b9ca0;
+        --acbg:rgba(95,119,71,.13);
+        --bo:#cbbd9f; --bos:#a99878;
+        --shadow:0 18px 46px rgba(76,60,35,.14);
+        --tight:0 1px 0 rgba(255,255,255,.72) inset;
+        --serif:'Libre Baskerville',Georgia,serif; --mono:'DM Mono','Courier New',monospace;
+      }
+      :root.dark {
+        --bg:#27231d; --sur:#332e25; --sur2:#211d18;
+        --ink:#efe7d4; --ink2:#d2c7b0; --mut:#9b8e78;
+        --ac:#91a873; --ac2:#d0a15f; --ac3:#8db6bb;
+        --acbg:rgba(145,168,115,.16);
+        --bo:#544a39; --bos:#786a50;
+        --shadow:0 18px 46px rgba(0,0,0,.28);
+        --tight:0 1px 0 rgba(255,255,255,.08) inset;
+      }
+
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+      html{scroll-behavior:smooth;}
+      body,#root{
+        color:var(--ink);font-family:var(--serif);min-height:100vh;
+        transition:background .35s,color .35s;overflow-x:hidden;
+        background:
+          radial-gradient(circle at 18px 18px, rgba(95,119,71,.12) 1px, transparent 1.5px) 0 0/34px 34px,
+          linear-gradient(rgba(169,152,120,.16) 1px, transparent 1px) 0 0/100% 34px,
+          linear-gradient(90deg, rgba(169,152,120,.12) 1px, transparent 1px) 0 0/34px 100%,
+          var(--bg);
+      }
+      body::before{
+        content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.42;
+        background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
+        mix-blend-mode:multiply;
+      }
+      /* Spine bookmark */
+      body::after{
+        content:'';position:fixed;left:18px;top:70px;bottom:18px;width:18px;z-index:-1;border-radius:12px;
+        background:linear-gradient(#8c5731 0 20%,#365f48 20% 43%,#d3b774 43% 61%,#5b6f88 61% 82%,#7b503e 82%);
+        box-shadow:0 0 0 1px rgba(60,47,31,.18),6px 0 18px rgba(62,45,24,.12);
+        opacity:.55;
+      }
+      ::-webkit-scrollbar{width:10px;}
+      ::-webkit-scrollbar-track{background:var(--sur2);}
+      ::-webkit-scrollbar-thumb{background:var(--bos);border:3px solid var(--sur2);border-radius:12px;}
+
+      /* ── NAV ── */
+      .nav{
+        position:sticky;top:0;z-index:100;
+        display:grid;grid-template-columns:220px 1fr auto;
+        align-items:center;gap:22px;min-height:54px;padding:7px 16px;
+        background:rgba(248,242,229,.88);backdrop-filter:blur(14px);
+        border-bottom:1px solid var(--bo);
+        box-shadow:0 8px 28px rgba(75,59,34,.08);
+        transition:background .35s,border-color .35s;
+      }
+      :root.dark .nav{background:rgba(51,46,37,.9);}
+      .nav-name{
+        display:inline-flex;align-items:center;gap:8px;width:max-content;
+        font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);
+        letter-spacing:0;background:var(--sur);border:1px solid var(--bo);
+        border-radius:7px;padding:8px 11px;box-shadow:var(--tight);
+      }
+      .nav-name::before{
+        content:'';width:9px;height:9px;border-radius:50%;background:var(--ac);
+        box-shadow:14px 0 0 var(--ac2),28px 0 0 var(--ac3);margin-right:26px;
+      }
+      .nav-name span{color:var(--ac);}
+      .nav-links{
+        justify-self:center;display:flex;gap:5px;
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:8px;padding:4px;box-shadow:var(--tight);
+      }
+      .nav-links a{
+        font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;
+        color:var(--ink2);text-decoration:none;transition:all .2s;
+        position:relative;padding:6px 10px;border-radius:6px;
+      }
+      .nav-links a:hover{color:var(--ink);background:var(--acbg);}
+      .nav-controls{display:flex;gap:6px;justify-self:end;}
+      .ctrl{
+        font-family:var(--mono);font-size:10px;letter-spacing:0;text-transform:none;
+        padding:7px 10px;background:var(--sur);border:1px solid var(--bo);
+        border-radius:7px;color:var(--ink2);cursor:pointer;
+        transition:all .2s;user-select:none;box-shadow:var(--tight);
+      }
+      .ctrl:hover{border-color:var(--bos);color:var(--ink);transform:translateY(-1px);}
+      .ctrl.on{background:var(--ac);color:#fff8ea;border-color:var(--ac);}
+
+      /* ── HERO ── */
+      .hero{
+        min-height:calc(100vh - 54px);
+        display:flex;flex-direction:column;justify-content:center;
+        padding:76px 56px 56px 70px;
+        border-bottom:1px solid var(--bo);
+        position:relative;overflow:hidden;
+      }
+      /* Garden OS Demo label */
+      .hero::before{
+        content:'Garden OS Demo';position:absolute;top:22px;left:70px;
+        font-family:var(--mono);font-size:10px;color:var(--mut);
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:6px;padding:6px 9px;box-shadow:var(--tight);
+      }
+      /* Sage sticky note */
+      .hero::after{
+        content:'Sage';position:absolute;right:76px;top:104px;
+        width:128px;height:86px;padding:12px 14px;
+        border:1px solid var(--bo);border-radius:5px;
+        background:#dfe7cf;color:var(--ac);
+        font-family:var(--mono);font-size:11px;
+        box-shadow:var(--shadow);transform:rotate(2deg);
+      }
+      .hero-grain{
+        position:absolute;inset:0;pointer-events:none;opacity:.16;
+        background:radial-gradient(circle at 50% 50%,transparent 0 44%,rgba(95,119,71,.22) 45%,transparent 46%);
+        background-size:260px 260px;
+      }
+
+      .avail{
+        display:inline-flex;align-items:center;gap:7px;width:max-content;
+        font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;
+        color:var(--ac);margin-bottom:18px;
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:999px;padding:7px 11px;box-shadow:var(--tight);
+      }
+      .avail-dot{width:7px;height:7px;border-radius:50%;background:var(--ac);animation:pr 2s ease-in-out infinite;flex-shrink:0;}
+      @keyframes pr{0%,100%{box-shadow:0 0 0 0 rgba(95,119,71,.45);}50%{box-shadow:0 0 0 6px rgba(95,119,71,0);}}
+      :root.dark .avail-dot{animation-name:prd;}
+      @keyframes prd{0%,100%{box-shadow:0 0 0 0 rgba(145,168,115,.48);}50%{box-shadow:0 0 0 6px rgba(145,168,115,0);}}
+
+      .hero-overline{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:none;color:var(--ac2);margin-bottom:18px;}
+      .hero-name{
+        max-width:590px;font-size:clamp(48px,7.2vw,92px);font-weight:700;
+        line-height:1.02;letter-spacing:0;color:var(--ink);margin-bottom:26px;
+        text-shadow:0 1px 0 rgba(255,255,255,.55);
+      }
+      .hero-name em{font-style:italic;color:var(--ac);}
+      .hero-desc{
+        font-size:15px;color:var(--ink2);max-width:520px;line-height:1.86;
+        margin-bottom:30px;background:rgba(248,242,229,.78);
+        border:1px solid var(--bo);border-radius:7px;padding:20px 22px;
+        box-shadow:var(--shadow),var(--tight);
+      }
+      :root.dark .hero-desc{background:rgba(51,46,37,.82);}
+      .hero-desc strong{color:var(--ink);font-weight:700;}
+      .hero-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+      .hero-loc{
+        font-family:var(--mono);font-size:10px;color:var(--mut);margin-left:4px;
+        background:var(--sur);border:1px dashed var(--bos);
+        border-radius:6px;padding:8px 10px;
+      }
+
+      /* ── DRAGGABLE WIDGETS ── */
+      .hero-widgets{position:absolute;inset:0;pointer-events:none;z-index:6;}
+      .dwidget{
+        position:absolute;pointer-events:all;
+        background:rgba(248,242,229,.93);
+        border:1px solid var(--bo);border-radius:9px;
+        box-shadow:var(--shadow),var(--tight);
+        overflow:hidden;backdrop-filter:blur(12px);
+        user-select:none;transition:box-shadow .15s;min-width:200px;
+      }
+      :root.dark .dwidget{background:rgba(51,46,37,.93);}
+      .dwidget.dragging{
+        box-shadow:0 32px 64px rgba(76,60,35,.3),var(--tight);
+        z-index:20;cursor:grabbing;
+      }
+      .dwidget-bar{
+        display:flex;align-items:center;gap:8px;
+        padding:8px 11px;border-bottom:1px solid var(--bo);
+        background:rgba(232,222,199,.5);cursor:grab;
+        font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.06em;
+      }
+      :root.dark .dwidget-bar{background:rgba(33,29,24,.5);}
+      .dwidget-dots{display:flex;gap:5px;flex-shrink:0;}
+      .dwidget-dot{width:8px;height:8px;border-radius:50%;}
+      .dwidget-dot.r{background:#c06060;opacity:.75;}
+      .dwidget-dot.y{background:#b89040;opacity:.75;}
+      .dwidget-dot.g{background:var(--ac);opacity:.75;}
+      .dwidget-body{padding:12px;}
+      .status-row{
+        display:flex;align-items:center;justify-content:space-between;gap:14px;
+        padding:7px 0;border-bottom:1px dashed rgba(169,152,120,.45);
+        font-family:var(--mono);font-size:9px;color:var(--ink2);
+      }
+      .status-row:last-child{border-bottom:0;}
+      .status-row strong{font-weight:500;color:var(--ink);}
+      .mini-pills{display:flex;flex-wrap:wrap;gap:5px;}
+      .mini-pill{
+        font-family:var(--mono);font-size:9px;color:var(--ink2);
+        background:var(--sur2);border:1px solid var(--bo);
+        border-radius:999px;padding:3px 7px;
+      }
+      .mini-map{
+        height:84px;border:1px solid var(--bo);border-radius:7px;margin-top:8px;
+        background:
+          radial-gradient(circle at 28% 38%,rgba(95,119,71,.26) 0 15%,transparent 16%),
+          radial-gradient(circle at 58% 32%,rgba(123,156,160,.24) 0 13%,transparent 14%),
+          radial-gradient(circle at 72% 68%,rgba(185,121,62,.18) 0 15%,transparent 16%),
+          #eee4cf;
+      }
+      :root.dark .mini-map{background:#27231d;}
+
+      /* ── BUTTONS ── */
+      .btn-fill,.btn-line{
+        font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;
+        border-radius:7px;cursor:pointer;text-decoration:none;
+        display:inline-block;transition:all .2s;box-shadow:var(--tight);
+      }
+      .btn-fill{padding:11px 18px;background:var(--ac);color:#fff8ea;border:1px solid rgba(47,41,31,.16);position:relative;overflow:hidden;}
+      .btn-fill::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.14);transform:translateX(-101%);transition:transform .3s;}
+      .btn-fill:hover::after{transform:translateX(0);}
+      .btn-fill:hover,.btn-line:hover{transform:translateY(-2px);}
+      .btn-line{padding:10px 16px;background:var(--sur);color:var(--ink2);border:1px solid var(--bo);}
+      .btn-line:hover{border-color:var(--bos);color:var(--ink);background:var(--acbg);}
+
+      /* ── CV DROPDOWN ── */
+      .cv-wrap{position:relative;display:inline-block;}
+      .cv-menu{
+        position:absolute;top:calc(100% + 7px);left:0;
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:8px;min-width:166px;z-index:200;
+        display:flex;flex-direction:column;box-shadow:var(--shadow);
+      }
+      .cv-opt{
+        font-family:var(--mono);font-size:10px;letter-spacing:.02em;text-transform:none;
+        padding:10px 13px;color:var(--ink2);text-decoration:none;
+        display:flex;align-items:center;gap:8px;
+        transition:background .15s,color .15s;
+        border:none;background:transparent;cursor:pointer;width:100%;text-align:left;
+      }
+      .cv-opt:hover{background:var(--acbg);color:var(--ac);}
+
+      /* ── SECTIONS ── */
+      .section{
+        margin:18px 20px 18px 52px;padding:34px 34px 38px;
+        border:1px solid var(--bo);border-radius:9px;
+        background:rgba(248,242,229,.78);
+        box-shadow:var(--shadow),var(--tight);position:relative;
+      }
+      :root.dark .section{background:rgba(51,46,37,.82);}
+      .section::before{
+        content:'';position:absolute;top:12px;left:14px;right:14px;
+        height:1px;background:linear-gradient(90deg,var(--bo),transparent);
+      }
+      .section.alt{background:rgba(232,222,199,.78);}
+      :root.dark .section.alt{background:rgba(33,29,24,.82);}
+      .sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:30px;}
+      .sec-num{
+        font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.02em;
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:6px;padding:5px 7px;flex-shrink:0;
+      }
+      .sec-title{font-size:clamp(26px,3.4vw,42px);font-weight:700;letter-spacing:0;line-height:1;color:var(--ink);}
+      .module-tabs{margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+      .module-tab{
+        font-family:var(--mono);font-size:9px;color:var(--ink2);
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:999px;padding:5px 8px;box-shadow:var(--tight);
+      }
+      .module-tab.live{color:#fff8ea;background:var(--ac);border-color:var(--ac);}
+
+      /* ── ABOUT ── */
+      .about-grid{display:grid;grid-template-columns:3fr 2fr;gap:28px;}
+      .about-body{background:var(--sur);border:1px solid var(--bo);border-radius:8px;padding:22px;box-shadow:var(--tight);}
+      .about-body p{color:var(--ink2);margin-bottom:16px;font-size:14px;line-height:1.82;}
+      .about-body p:last-child{margin-bottom:0;}
+      .about-body p strong{color:var(--ink);font-weight:700;}
+      .fact{
+        display:flex;justify-content:space-between;align-items:baseline;gap:18px;
+        padding:12px 13px;border:1px solid var(--bo);border-bottom:none;
+        background:var(--sur);box-shadow:var(--tight);
+      }
+      .fact:first-child{border-top-left-radius:8px;border-top-right-radius:8px;}
+      .fact:last-child{border-bottom:1px solid var(--bo);border-bottom-left-radius:8px;border-bottom-right-radius:8px;}
+      .fact-label{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;color:var(--mut);}
+      .fact-value{font-family:var(--mono);font-size:12px;color:var(--ink);font-weight:500;text-align:right;}
+
+      /* Profile card inside about */
+      .profile-card{background:var(--sur);border:1px solid var(--bo);border-radius:8px;padding:18px;margin-bottom:12px;box-shadow:var(--tight);}
+      .profile-card-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+      .profile-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#dfe7cf;border:1px solid var(--bo);font-family:var(--mono);font-size:13px;color:var(--ac);font-weight:500;}
+      .profile-role{font-family:var(--mono);font-size:10px;color:var(--mut);margin-bottom:3px;}
+      .profile-name{font-size:17px;font-weight:700;color:var(--ink);}
+      .profile-focus{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+      .focus-cell{border:1px solid var(--bo);border-radius:7px;background:var(--sur2);padding:9px 8px;font-family:var(--mono);font-size:9px;color:var(--ink2);text-align:center;}
+      .focus-cell strong{display:block;color:var(--ac);font-size:11px;margin-bottom:3px;}
+      .stack-note,.trait-strip{margin:10px 0 22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--ink2);}
+      .stack-note span,.trait-strip span{background:var(--sur);border:1px solid var(--bo);border-radius:7px;padding:6px 9px;box-shadow:var(--tight);}
+
+      /* ── SKILLS ── */
+      .skill-group{
+        display:grid;grid-template-columns:160px 1fr;gap:22px;
+        padding:16px;margin-bottom:10px;
+        border:1px solid var(--bo);border-radius:8px;
+        background:var(--sur);box-shadow:var(--tight);
+      }
+      .sg-label{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:none;color:var(--ac);padding-top:12px;}
+      .sg-tags{display:flex;flex-wrap:wrap;gap:8px;}
+      .sg-tag{
+        display:inline-flex;flex-direction:column;align-items:center;gap:8px;
+        padding:12px 13px 11px;background:#f1ead8;border:1px solid var(--bo);
+        border-radius:7px;font-family:var(--mono);font-size:10px;color:var(--ink2);
+        cursor:default;transition:all .22s;user-select:none;
+        min-width:82px;text-align:center;box-shadow:var(--tight);
+      }
+      :root.dark .sg-tag{background:#28231c;}
+      .sg-tag:hover{border-color:var(--ac);color:var(--ac);background:var(--acbg);transform:translateY(-3px) rotate(-.4deg);}
+      .sg-tag.main{background:#dfe7cf;border-color:var(--ac);color:var(--ac);font-weight:500;}
+      :root.dark .sg-tag.main{background:rgba(145,168,115,.18);}
+      .sg-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;opacity:.62;transition:opacity .22s;flex-shrink:0;}
+      .sg-tag:hover .sg-icon,.sg-tag.main .sg-icon{opacity:1;}
+      .sg-icon svg{width:23px;height:23px;}
+
+      /* ── SOFT SKILLS ── */
+      .soft-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+      .soft-card{
+        background:var(--sur);border:1px solid var(--bo);border-radius:8px;
+        padding:24px 22px;transition:border-color .25s,transform .25s,box-shadow .25s;
+        position:relative;overflow:hidden;box-shadow:var(--tight);
+      }
+      .soft-card::before{content:'';position:absolute;top:12px;right:14px;width:46px;height:58px;border:1px solid rgba(95,119,71,.25);border-radius:50% 50% 45% 45%;opacity:.34;}
+      .soft-card:hover{border-color:var(--ac);transform:translateY(-4px) rotate(-.35deg);box-shadow:var(--shadow);}
+      .soft-icon{font-size:28px;margin-bottom:14px;display:block;line-height:1;}
+      .soft-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:0;}
+      .soft-desc{font-size:13px;color:var(--ink2);line-height:1.72;}
+      .soft-example{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:none;color:var(--ac2);border-bottom:1px solid rgba(185,121,62,.45);padding-bottom:2px;}
+
+      /* ── PROJECTS ── */
+      .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}
+      .proj-card{
+        background:var(--sur);border:1px solid var(--bo);border-radius:9px;
+        transition:border-color .25s,transform .25s,box-shadow .25s;
+        overflow:hidden;box-shadow:var(--tight);position:relative;
+      }
+      .proj-card::after{content:'';position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:50%;background:var(--ac2);box-shadow:0 0 0 4px rgba(185,121,62,.12);}
+      .proj-card:nth-child(2)::after{background:var(--ac3);box-shadow:0 0 0 4px rgba(123,156,160,.13);}
+      .proj-card:nth-child(3)::after{background:var(--ac);box-shadow:0 0 0 4px rgba(95,119,71,.13);}
+      .proj-card:hover{border-color:var(--ac);transform:translateY(-5px) rotate(.25deg);box-shadow:var(--shadow);}
+
+      /* Slider */
+      .slider-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--sur2);border-bottom:1px solid var(--bo);}
+      .slider-track{display:flex;height:100%;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform;}
+      .slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;position:relative;}
+      .slide::before{content:'';position:absolute;inset:16px;border:1px dashed rgba(255,255,255,.28);border-radius:50%;}
+      .slider-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2;}
+      .dot{width:6px;height:6px;border-radius:50%;background:var(--mut);opacity:.42;transition:opacity .2s,transform .2s;cursor:pointer;border:none;padding:0;}
+      .dot.active{opacity:1;background:var(--ac);transform:scale(1.25);}
+      .sarr{position:absolute;top:50%;transform:translateY(-50%);z-index:2;background:var(--sur);border:1px solid var(--bo);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--ink2);transition:all .2s;opacity:0;box-shadow:var(--tight);}
+      .slider-wrap:hover .sarr{opacity:1;}
+      .sarr:hover{background:var(--ac);color:#fff8ea;border-color:var(--ac);}
+      .sarr.l{left:8px;} .sarr.r{right:8px;}
+      .card-body{padding:23px 24px 25px;}
+      .card-num{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.04em;margin-bottom:8px;}
+      .card-title{font-size:19px;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:0;}
+      .card-sub{font-family:var(--mono);font-size:10px;color:var(--ac);letter-spacing:.04em;margin-bottom:12px;}
+      .project-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:13px;}
+      .project-status,.project-focus{font-family:var(--mono);font-size:9px;border:1px solid var(--bo);border-radius:999px;padding:4px 7px;background:var(--sur2);color:var(--ink2);}
+      .project-status{color:#fff8ea;background:var(--ac);border-color:var(--ac);}
+      .card-desc{font-size:13px;color:var(--ink2);line-height:1.72;margin-bottom:16px;}
+      .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:19px;}
+      .card-tag{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:none;color:var(--ink2);padding:3px 7px;border:1px solid var(--bo);border-radius:999px;background:rgba(255,255,255,.24);}
+      .card-links{display:flex;gap:10px;}
+      .card-link{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;color:var(--ink2);text-decoration:none;padding:6px 12px;border:1px solid var(--bo);border-radius:7px;transition:all .2s;display:inline-flex;align-items:center;gap:4px;background:var(--sur2);}
+      .card-link:hover{color:var(--ac);border-color:var(--ac);background:var(--acbg);}
+
+      /* ── CONTACT ── */
+      .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+      .contact-grid>div{background:var(--sur);border:1px solid var(--bo);border-radius:8px;padding:22px;box-shadow:var(--tight);}
+      .contact-note{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-family:var(--mono);font-size:10px;color:var(--ac);}
+      .contact-note::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--ac);box-shadow:0 0 0 4px var(--acbg);}
+      .ci{font-size:14px;color:var(--ink2);line-height:1.82;margin-bottom:18px;}
+      .c-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--bo);text-decoration:none;transition:all .2s;}
+      .c-row:hover .c-val{color:var(--ac);}
+      .c-label{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:none;color:var(--mut);}
+      .c-val{font-family:var(--mono);font-size:12px;color:var(--ink2);transition:color .2s;text-align:right;}
+
+      /* ── FOOTER ── */
+      footer{
+        margin:18px 20px 18px 52px;padding:18px 22px;
+        display:flex;justify-content:space-between;align-items:center;
+        background:var(--sur);border:1px solid var(--bo);
+        border-radius:9px;box-shadow:var(--tight);
+      }
+      footer span{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.03em;}
+      .fac{color:var(--ac);}
+
+      /* ── ANIMATIONS ── */
+      @keyframes fi{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+      .fi{animation:fi .55s ease both;}
+      .fi1{animation-delay:.08s;} .fi2{animation-delay:.16s;} .fi3{animation-delay:.24s;} .fi4{animation-delay:.32s;}
+      .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+      .reveal.in{opacity:1;transform:none;}
+      @keyframes eggdot{from{transform:scale(1) translateY(0);}to{transform:scale(1.4) translateY(-6px);}}
+
+      /* ── RESPONSIVE ── */
+      @media(max-width:980px){
+        .nav{grid-template-columns:1fr auto;padding:7px 12px;}
+        .nav-links{display:none;}
+        .hero{padding:54px 20px 42px 30px;}
+        .hero::before{left:30px;}
+        .hero::after{display:none;}
+        .hero-windows{position:relative;right:auto;bottom:auto;width:100%;margin-top:24px;grid-template-columns:1fr 1fr;}
+        .section,footer{margin-left:20px;}
+        .about-grid,.contact-grid{grid-template-columns:1fr;gap:18px;}
+        .skill-group{grid-template-columns:1fr;gap:12px;}
+      }
+      /* ── GAME JAM BADGE ── */
+      .jam-badge{
+        display:inline-flex;align-items:center;gap:5px;
+        font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+        padding:3px 8px;border-radius:999px;
+        background:var(--ac2);color:#fff8ea;
+        border:1px solid rgba(255,255,255,.2);
+        box-shadow:0 2px 8px rgba(185,121,62,.3);
+        vertical-align:middle;margin-left:6px;
+      }
+
+      /* ── HERO CAROUSEL ── */
+      .hero-carousel{
+        position:absolute;right:0;top:0;bottom:0;
+        width:min(52%,620px);
+        overflow:hidden;
+        display:flex;flex-direction:column;
+      }
+      .hc-track{
+        display:flex;height:100%;
+        transition:transform .6s cubic-bezier(.4,0,.2,1);
+        will-change:transform;
+      }
+      .hc-slide{
+        min-width:100%;height:100%;
+        position:relative;overflow:hidden;flex-shrink:0;
+      }
+      .hc-slide img{
+        width:100%;height:100%;object-fit:cover;
+        display:block;
+      }
+      /* gradient fade left so text is always readable */
+      .hc-slide::before{
+        content:'';
+        position:absolute;inset:0;z-index:1;
+        background:linear-gradient(90deg,var(--bg) 0%,rgba(239,231,212,.7) 22%,transparent 55%);
+        pointer-events:none;
+      }
+      :root.dark .hc-slide::before{
+        background:linear-gradient(90deg,var(--bg) 0%,rgba(39,35,29,.7) 22%,transparent 55%);
+      }
+      /* pill overlay bottom-right */
+      .hc-info{
+        position:absolute;bottom:20px;right:20px;z-index:2;
+        display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+      }
+      .hc-title-pill{
+        font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+        padding:6px 10px;border-radius:6px;
+        background:rgba(248,242,229,.88);color:var(--ink);
+        border:1px solid var(--bo);box-shadow:var(--shadow);
+        backdrop-filter:blur(8px);
+      }
+      :root.dark .hc-title-pill{background:rgba(51,46,37,.88);}
+      .hc-label-pill{
+        font-family:var(--mono);font-size:9px;letter-spacing:.1em;
+        text-transform:uppercase;padding:3px 8px;border-radius:999px;
+        background:var(--ac);color:#fff8ea;
+        box-shadow:0 2px 8px rgba(95,119,71,.35);
+      }
+      /* placeholder slide (no img) */
+      .hc-placeholder{
+        width:100%;height:100%;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:14px;font-family:var(--mono);
+        background:var(--sur2);
+      }
+      .hc-placeholder-icon{font-size:48px;filter:drop-shadow(0 4px 16px rgba(0,0,0,.2));}
+      .hc-placeholder-label{
+        font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);
+      }
+      /* controls */
+      .hc-controls{
+        position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+        z-index:3;display:flex;align-items:center;gap:8px;
+      }
+      .hc-dot{
+        width:6px;height:6px;border-radius:50%;
+        background:var(--bo);border:none;cursor:pointer;padding:0;
+        transition:all .2s;
+      }
+      .hc-dot.on{background:var(--ac);transform:scale(1.4);}
+      .hc-arrow{
+        position:absolute;top:50%;transform:translateY(-50%);
+        z-index:3;background:rgba(248,242,229,.82);
+        border:1px solid var(--bo);border-radius:50%;
+        width:34px;height:34px;
+        display:flex;align-items:center;justify-content:center;
+        cursor:pointer;font-size:16px;color:var(--ink2);
+        transition:all .2s;backdrop-filter:blur(8px);
+        box-shadow:var(--shadow);
+      }
+      :root.dark .hc-arrow{background:rgba(51,46,37,.82);}
+      .hc-arrow:hover{background:var(--ac);color:#fff8ea;border-color:var(--ac);}
+      .hc-arrow.l{left:14px;} .hc-arrow.r{right:14px;}
+      /* thumbnail strip */
+      .hc-thumbs{
+        position:absolute;right:12px;top:50%;transform:translateY(-50%);
+        z-index:3;display:flex;flex-direction:column;gap:6px;
+      }
+      .hc-thumb{
+        width:44px;height:32px;border-radius:4px;
+        border:2px solid transparent;
+        overflow:hidden;cursor:pointer;
+        transition:border-color .2s,transform .2s;
+        background:var(--sur2);
+        opacity:.55;
+      }
+      .hc-thumb.on{border-color:var(--ac);opacity:1;transform:scale(1.08);}
+      .hc-thumb:hover{opacity:.85;}
+      .hc-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+      .hc-thumb-icon{
+        width:100%;height:100%;
+        display:flex;align-items:center;justify-content:center;
+        font-size:16px;
+      }
+
+      /* Make hero layout work with carousel */
+      .hero{
+        position:relative;
+        overflow:hidden;
+      }
+      .hero-left{
+        position:relative;z-index:2;
+        max-width:min(56%,640px);
+      }
+
+      @media(max-width:980px){
+        .hero-carousel{display:none;}
+        .hero-left{max-width:100%;}
+      }
+    `;
+
+    /* ═══════════════════════════════════════
+       SVG ICONS
+    ═══════════════════════════════════════ */
+    const SVG = {
+      unity:   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l7.5 3.75-2.6 1.3L9.4 5.48 12 4.18zM4.5 9.43l7.5 3.75v7.5L4.5 16.93V9.43zm15 0v7.5l-7.5 3.75v-7.5l7.5-3.75z"/></svg>,
+      csharp:  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 15.97l.41 2.44c-.26.14-.68.27-1.24.39-.57.13-1.24.2-2.01.2-2.21-.04-3.87-.7-4.98-1.96C2.56 15.77 2 14.16 2 12.21c.05-2.31.72-4.08 2-5.29C5.32 5.7 6.96 5.05 9 5c.75 0 1.4.07 1.94.19l-.38 2.44-.69-.26c-.3-.1-.67-.15-1.08-.15-1.14.03-2.03.4-2.67 1.1-.64.7-.96 1.71-.96 3.02 0 1.19.31 2.13.92 2.8.6.68 1.49 1.03 2.66 1.04l1.11-.11.49-.31zM13 11h2V9h2v2h2v2h-2v2h-2v-2h-2v-2z"/></svg>,
+      godot:   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>,
+      blender: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 3a7 7 0 110 14A7 7 0 0112 5zm0 2a5 5 0 100 10A5 5 0 0012 7z"/></svg>,
+      git:     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.71 9.58l-6.29-6.29a1 1 0 00-1.41 0L2.29 14a1 1 0 000 1.41l6.29 6.29a1 1 0 001.41 0L20.71 11a1 1 0 000-1.42zM11 19.59L4.41 13 7 10.41l1.29 1.3 1.42-1.42-1.3-1.29L10 7.41l1.29 1.3 1.42-1.42L11.41 6 13 4.41 19.59 11 11 19.59z"/></svg>,
+      qa:      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>,
+      github:  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"/></svg>,
+      vscode:  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 2L7 12.5 3.5 9 2 10.5l5.5 5.5L2 21.5 3.5 23l5.5-5.5L17 22l5-2.5v-15L17 2zm3 17.5l-9-4.5L7.5 12l3.5-3L20 4.5v15z"/></svg>,
+      krita:   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.71 4.63l-1.34-1.34a1 1 0 00-1.41 0L9 12.25 11.75 15l8.96-8.96a1 1 0 000-1.41zM7 14L5.5 15.5 8 18l1.5-1.5L7 14zm-4 4l2 2h2l-2-2H3z"/></svg>,
+      scrum:   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 3l5 5-5 5V6zm-5 5l5-5v10l-5-5z"/></svg>,
+      trello:  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zM11 16H7V8h4v8zm6-5h-4V8h4v3z"/></svg>,
+      oop:     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm4 5h12v2H8v-2zm4 5h8v2h-8v-2z"/></svg>,
+      html:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.18 2.85L5.5 17.17l6.5 1.83 6.5-1.83 1.32-14.32H4.18zm10.3 9.96l-.24 2.65-2.24.61-2.24-.61-.15-1.69h1.7l.08.88 1.61.44 1.61-.44.16-1.85-5.22-1.44-.35-3.93h8.1l-.11 1.7H8.42l.12 1.34 4.24 1.18-.3 2.16z"/></svg>,
+      proc:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>,
+      json:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h2v2H5v5a2 2 0 01-2 2 2 2 0 012 2v5h2v2H5c-1.07-.27-2-.9-2-2v-4a2 2 0 00-2-2H0v-2h1a2 2 0 002-2V5a2 2 0 012-2zm14 0c1.07.27 2 .9 2 2v4a2 2 0 002 2h1v2h-1a2 2 0 00-2 2v4a2 2 0 01-2 2h-2v-2h2v-5a2 2 0 012-2 2 2 0 01-2-2V5h-2V3h2z"/></svg>,
+      user:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>,
+      sprint:  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>,
+      gdscr:   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>,
+      phys:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/></svg>,
+      anim:    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg>,
+    };
+    const Icon = ({id}) => (
+      <div className="sg-icon">
+        {React.cloneElement(SVG[id]||SVG.oop,{style:{width:23,height:23}})}
+      </div>
+    );
+
+    /* ═══════════════════════════════════════
+       DATA
+    ═══════════════════════════════════════ */
+    const SKILLS = [
+      { label:"Game Dev", tags:[
+        {name:"Unity",        icon:"unity",  main:true},
+        {name:"C#",           icon:"csharp", main:true},
+        {name:"Godot 4",      icon:"godot",  main:true},
+        {name:"GDScript",     icon:"gdscr"},
+        {name:"Blender",      icon:"blender"},
+        {name:"Physics 2D/3D",icon:"phys"},
+        {name:"Animator",     icon:"anim"},
+        {name:"Procedural",   icon:"proc"},
+      ]},
+      { label:"Code", tags:[
+        {name:"OOP",          icon:"oop",    main:true},
+        {name:"Git",          icon:"git"},
+        {name:"JSON / Save",  icon:"json"},
+        {name:"State Machine",icon:"anim"},
+        {name:"HTML/CSS/JS",  icon:"html"},
+      ]},
+      { label:"QA & Tools", tags:[
+        {name:"QA Testing",   icon:"qa",     main:true},
+        {name:"GitHub",       icon:"github"},
+        {name:"VS Code",      icon:"vscode"},
+        {name:"Krita",        icon:"krita"},
+      ]},
+      { label:"Project Mgmt", tags:[
+        {name:"Scrum",        icon:"scrum",  main:true},
+        {name:"Trello",       icon:"trello"},
+        {name:"GitHub Issues",icon:"github"},
+        {name:"User Stories", icon:"user"},
+        {name:"Sprints",      icon:"sprint"},
+      ]},
+    ];
+
+    const SOFT = [
+      {icon:"🤝",es:["Trabajo en equipo","Coordinación en entornos de alta presión con foco en resultados compartidos.","→ KPIs grupales en ventas"],
+                 en:["Teamwork","Team coordination in high-pressure environments focused on shared results.","→ Shared sales KPIs"]},
+      {icon:"💬",es:["Comunicación clara","Traducir conceptos técnicos a lenguaje claro para clientes y stakeholders.","→ Atención en concesionarios Fiat/Renault"],
+                 en:["Clear communication","Translating technical concepts into plain language for clients and stakeholders.","→ Client-facing at Fiat/Renault"]},
+      {icon:"📋",es:["Gestión de proyectos","Scrum práctico: sprints en Trello, user stories, story points e iteración por revisión.","→ 3 proyectos gestionados con Scrum"],
+                 en:["Project management","Practical Scrum: Trello sprints, user stories, story points, review-based iteration.","→ 3 projects managed with Scrum"]},
+      {icon:"🔄",es:["Adaptabilidad","Transición activa de ventas a software, aprendiendo C#, Unity, Godot y QA en paralelo.","→ Cambio de carrera en progreso"],
+                 en:["Adaptability","Active career switch from sales to software, learning C#, Unity, Godot and QA in parallel.","→ Ongoing career transition"]},
+      {icon:"🎯",es:["Orientación a resultados","Background en ventas con KPIs claros. Cada proyecto tiene entregables concretos y deadlines.","→ Ciclo completo en Fiat / Renault"],
+                 en:["Results-driven","Sales background with clear KPIs. Every project has concrete deliverables and deadlines.","→ Full sales cycle at Fiat / Renault"]},
+      {icon:"📚",es:["Aprendizaje continuo","C# Masterclass (Udemy) + QA Testing (BairesDev) + UNPAZ + proyectos reales en simultáneo.","→ 3 cursos activos a la vez"],
+                 en:["Continuous learning","C# Masterclass (Udemy) + QA Testing (BairesDev) + UNPAZ degree + real projects — all at once.","→ 3 active courses simultaneously"]},
+    ];
+
+    const PROJECTS = [
+      {
+        num:"01", title:"Dungeon Crawler 2D", sub:"Unity · C# · Git",
+        statusEs:"En desarrollo", statusEn:"In progress",
+        focusEs:"Gameplay · Sistemas", focusEn:"Gameplay · Systems",
+        year:"2024 →",
+        es:"Generación procedural de mazmorras con BSP, combate por turnos con State Machine, inventario drag & drop y guardado en JSON.",
+        en:"Procedural dungeon generation (BSP), turn-based combat with State Machine, drag-and-drop inventory with JSON save/load.",
+        tags:["Unity","C#","Git","Procedural BSP","State Machine","JSON"],
+        links:[{l:"GitHub",h:"https://github.com/Gerodrix"}],
+        slides:[{icon:"🗡️",label:"Gameplay",color:"#2a3a22"},{icon:"🗺️",label:"Dungeon Gen",color:"#22301c"},{icon:"🎒",label:"Inventory",color:"#26382a"}],
+      },
+      {
+        num:"02", title:"Plataformero 3D", sub:"Godot 4 · GDScript · Blender",
+        statusEs:"Completado", statusEn:"Completed",
+        focusEs:"Física · Assets", focusEn:"Physics · Assets",
+        year:"2024",
+        es:"Nivel completo con física de salto customizada, assets modelados en Blender, sistema de checkpoints y puntaje.",
+        en:"Full level with custom jump physics, Blender-modeled assets, checkpoint system, and score tracking.",
+        tags:["Godot 4","GDScript","Blender","Custom Physics","3D"],
+        links:[{l:"GitHub",h:"https://github.com/Gerodrix"}],
+        slides:[{icon:"🏃",label:"Gameplay",color:"#2a3040"},{icon:"🎨",label:"Assets",color:"#222838"},{icon:"🏁",label:"Checkpoints",color:"#1e2434"}],
+      },
+      {
+        num:"03", title:"Gym Management Sim", sub:"Unity · C# · UI Toolkit · 72h",
+        statusEs:"Completado", statusEn:"Completed",
+        focusEs:"UI · Procedural", focusEn:"UI · Procedural",
+        year:"2024",
+        es:"Prototipo de gestión de recursos con generación procedural de clientes, sistema de satisfacción dinámico y UI reactiva en tiempo real.",
+        en:"Resource management prototype with procedural client generation, dynamic satisfaction system, and real-time reactive UI.",
+        tags:["Unity","C#","UI Toolkit","Procedural","Game Jam"],
+        links:[{l:"GitHub",h:"https://github.com/Gerodrix"}],
+        slides:[{icon:"🏋️",label:"Management",color:"#3a2810"},{icon:"📊",label:"UI",color:"#30200c"},{icon:"👥",label:"Clients",color:"#341c08"}],
+      },
+      {
+        num:"04", title:"Casa y Ritmo", sub:"Unity · C# · Isométrico · Prototipo",
+        statusEs:"En desarrollo", statusEn:"In progress",
+        focusEs:"Game Design · Cozy", focusEn:"Game Design · Cozy",
+        year:"2025 →",
+        es:"Vertical slice de juego cozy isométrico: casa con estaciones de juego, sistema de tareas diarias + Pomodoro integrado, zona de pesca, huerta, mercado y decoración. UI en runtime con inventario y monedas.",
+        en:"Cozy isometric game vertical slice: house with game stations, daily task system + integrated Pomodoro, fishing zone, garden, market, and decoration. Runtime UI with inventory and coins.",
+        tags:["Unity","C#","Isométrico","Pomodoro","Inventario","Cozy","Prototipo"],
+        links:[{l:"GitHub",h:"https://github.com/Gerodrix"},{l:"README",h:"#"}],
+        slides:[
+          {icon:"🏠",label:"Casa base",  color:"#2e3820"},
+          {icon:"🎣",label:"Pesca",      color:"#1e2e38"},
+          {icon:"🌱",label:"Huerta",     color:"#243820"},
+          {icon:"🛒",label:"Mercado",    color:"#382820"},
+        ],
+      },
+      {
+        num:"05", title:"OGAM", sub:"Godot · GDScript · Game Jam · Colaboración",
+        statusEs:"Publicado", statusEn:"Published",
+        focusEs:"Plataformero · Combate", focusEn:"Platformer · Combat",
+        year:"2024",
+        jam:true,
+        es:"Plataformero pixel art con sistema de combate por elementos (Fuego, Hielo, Rayo, Piedra). El mago defiende su torre contra oleadas de esqueletos enemigos. Desarrollado en Game Jam como colaboración.",
+        en:"Pixel art platformer with elemental combat system (Fire, Ice, Lightning, Stone). The wizard defends his tower against waves of skeleton enemies. Developed during a Game Jam as a collaboration.",
+        tags:["Godot","GDScript","Pixel Art","Game Jam","Colaboración","Plataformero"],
+        links:[{l:"Jugar en itch.io",h:"https://alejoyder.itch.io/ogam"},{l:"itch.io",h:"https://alejoyder.itch.io/ogam"}],
+        slides:[
+          {img:"https://img.itch.zone/aW1hZ2UvMzIzMTQ2NC8xOTI4MTA1OC5wbmc=/794x1000/mSYBpQ.png", label:"Splash"},
+          {img:"https://img.itch.zone/aW1hZ2UvMzIzMTQ2NC8xOTI4MTA1Ny5wbmc=/794x1000/X3z8Ys.png", label:"Main Menu"},
+          {img:"https://img.itch.zone/aW1hZ2UvMzIzMTQ2NC8xOTI4MTA1Ni5wbmc=/794x1000/xkEGjC.png", label:"Gameplay"},
+        ],
+      },
+    ];
+
+    /* ═══════════════════════════════════════
+       DROP ZONE + EASTER EGG SYSTEM
+    ═══════════════════════════════════════ */
+    // Global state shared between widgets and the easter egg checker
+    const droppedRef = { status: false, tools: false, map: false };
+
+    function EasterEgg({ visible, onClose }) {
+      useEffect(() => {
+        if (!visible) return;
+        const t = setTimeout(onClose, 6000);
+        return () => clearTimeout(t);
+      }, [visible, onClose]);
+      if (!visible) return null;
+      return (
+        <div style={{
+          position:'fixed',inset:0,zIndex:9999,
+          display:'flex',alignItems:'center',justifyContent:'center',
+          background:'rgba(47,41,31,.72)',backdropFilter:'blur(8px)',
+          animation:'fi .4s ease both',
+        }} onClick={onClose}>
+          <div style={{
+            background:'var(--sur)',border:'2px solid var(--ac)',
+            borderRadius:16,padding:'40px 48px',textAlign:'center',
+            maxWidth:420,boxShadow:'0 32px 80px rgba(0,0,0,.4)',
+            position:'relative',
+          }}>
+            {/* garden particle dots */}
+            {[...Array(8)].map((_,i)=>(
+              <div key={i} style={{
+                position:'absolute',
+                width:8,height:8,borderRadius:'50%',
+                background:['var(--ac)','var(--ac2)','var(--ac3)'][i%3],
+                top:`${10+Math.sin(i*45*Math.PI/180)*38}%`,
+                left:`${50+Math.cos(i*45*Math.PI/180)*42}%`,
+                animation:`eggdot ${1+i*.15}s ease-in-out infinite alternate`,
+              }}/>
+            ))}
+            <div style={{fontSize:52,marginBottom:16}}>🌱</div>
+            <div style={{
+              fontFamily:'var(--serif)',fontSize:22,fontWeight:700,
+              color:'var(--ink)',marginBottom:10,letterSpacing:0,
+            }}>Todo en orden, Geronimo.</div>
+            <div style={{
+              fontFamily:'var(--mono)',fontSize:11,color:'var(--mut)',
+              lineHeight:1.7,marginBottom:20,
+            }}>
+              status.board · core.tools · project.map<br/>
+              <span style={{color:'var(--ac)'}}>// todos los módulos activos.</span>
+            </div>
+            <div style={{
+              fontFamily:'var(--mono)',fontSize:10,
+              color:'var(--ac2)',borderTop:'1px solid var(--bo)',
+              paddingTop:14,
+            }}>
+              🎮 Game Dev Jr. · Buenos Aires · Disponible
+            </div>
+            <div style={{
+              position:'absolute',top:12,right:14,
+              fontFamily:'var(--mono)',fontSize:9,color:'var(--mut)',
+              cursor:'pointer',
+            }} onClick={onClose}>esc</div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════
+       DRAGGABLE WIDGET WITH DROP DETECTION
+    ═══════════════════════════════════════ */
+    function DraggableWidget({ widgetKey, title, children, defaultPos, style={}, onDrop }) {
+      const [pos, setPos] = useState(defaultPos);
+      const [dragging, setDragging] = useState(false);
+      const [landed, setLanded] = useState(false);
+      const offset = useRef({x:0,y:0});
+      const ref = useRef(null);
+
+      const onDown = e => {
+        e.preventDefault();
+        setDragging(true);
+        setLanded(false);
+        const cl = e.touches ? e.touches[0] : e;
+        offset.current = { x: cl.clientX - pos.x, y: cl.clientY - pos.y };
+      };
+
+      useEffect(() => {
+        if (!dragging) return;
+        const onMove = e => {
+          const cl = e.touches ? e.touches[0] : e;
+          const hero = ref.current?.closest('.hero');
+          if (!hero) return;
+          const rect = hero.getBoundingClientRect();
+          const ww = ref.current?.offsetWidth || 200;
+          const wh = ref.current?.offsetHeight || 100;
+          setPos({
+            x: Math.min(Math.max(0, cl.clientX - offset.current.x - rect.left), rect.width - ww),
+            y: Math.min(Math.max(0, cl.clientY - offset.current.y - rect.top),  rect.height - wh),
+          });
+        };
+        const onUp = e => {
+          setDragging(false);
+          // Check if widget center is inside the named drop zone
+          if (!ref.current) return;
+          const zone = document.querySelector(`.drop-zone[data-key="${widgetKey}"]`);
+          if (!zone) return;
+          const wRect = ref.current.getBoundingClientRect();
+          const zRect = zone.getBoundingClientRect();
+          const cx = wRect.left + wRect.width/2;
+          const cy = wRect.top  + wRect.height/2;
+          const inside = cx >= zRect.left && cx <= zRect.right && cy >= zRect.top && cy <= zRect.bottom;
+          if (inside) {
+            setLanded(true);
+            onDrop(widgetKey, true);
+          } else {
+            onDrop(widgetKey, false);
+          }
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup',   onUp);
+        window.addEventListener('touchmove', onMove, {passive:false});
+        window.addEventListener('touchend',  onUp);
+        return () => {
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup',   onUp);
+          window.removeEventListener('touchmove', onMove);
+          window.removeEventListener('touchend',  onUp);
+        };
+      }, [dragging]);
+
+      return (
+        <div
+          ref={ref}
+          className={`dwidget${dragging?' dragging':''}${landed?' landed':''}`}
+          style={{
+            left: pos.x, top: pos.y,
+            outline: landed ? '2px solid var(--ac)' : 'none',
+            ...style,
+          }}
+        >
+          <div className="dwidget-bar" onMouseDown={onDown} onTouchStart={onDown}>
+            <div className="dwidget-dots">
+              <div className="dwidget-dot r"/>
+              <div className="dwidget-dot y"/>
+              <div className="dwidget-dot g"/>
+            </div>
+            {title}
+            {landed && <span style={{marginLeft:'auto',color:'var(--ac)',fontSize:9}}>✓</span>}
+          </div>
+          <div className="dwidget-body">{children}</div>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════
+       DROP ZONES (rendered inside hero-widgets)
+    ═══════════════════════════════════════ */
+    function DropZones({ dropped }) {
+      const zones = [
+        { key:'status', label:'status.board', x:'62%', y:'8%',  w:110, h:58 },
+        { key:'tools',  label:'core.tools',   x:'76%', y:'8%',  w:90,  h:58 },
+        { key:'map',    label:'project.map',  x:'62%', y:'52%', w:200, h:58 },
+      ];
+      return (
+        <>
+          {zones.map(z => {
+            const done = dropped[z.key];
+            return (
+              <div
+                key={z.key}
+                className="drop-zone"
+                data-key={z.key}
+                style={{
+                  position:'absolute',
+                  left:z.x, top:z.y,
+                  width:z.w, height:z.h,
+                  border: done ? '2px solid var(--ac)' : '2px dashed var(--bos)',
+                  borderRadius:9,
+                  background: done ? 'rgba(95,119,71,.13)' : 'rgba(169,152,120,.08)',
+                  display:'flex',alignItems:'center',justifyContent:'center',
+                  pointerEvents:'none',
+                  transition:'all .3s',
+                }}
+              >
+                <span style={{
+                  fontFamily:'var(--mono)',fontSize:8,letterSpacing:'.1em',
+                  color: done ? 'var(--ac)' : 'var(--mut)',
+                  textTransform:'uppercase',
+                }}>
+                  {done ? '✓ ' : ''}{z.label}
+                </span>
+              </div>
+            );
+          })}
+        </>
+      );
+    }
+
+    /* ═══════════════════════════════════════
+       HERO CAROUSEL — fixed with working images
+    ═══════════════════════════════════════ */
+    const HERO_SLIDES = [
+      {
+        // Use the uploaded screenshots directly as base64-able img tags
+        img: null, icon:'🧙', color:'#1a2238',
+        label:'OGAM · Pixel Art',
+        title:'OGAM — Pixel Art Platformer',
+        sub:'Game Jam · Godot · Colaboración',
+        href:'https://alejoyder.itch.io/ogam',
+      },
+      {
+        img: null, icon:'⚔️', color:'#1e2d1e',
+        label:'OGAM · Combat',
+        title:'OGAM — Combate por Elementos',
+        sub:'Fuego · Hielo · Rayo · Piedra',
+        href:'https://alejoyder.itch.io/ogam',
+      },
+      {
+        img: null, icon:'🏠', color:'#2e3820',
+        label:'Casa y Ritmo · Cozy',
+        title:'Casa y Ritmo — Cozy Game',
+        sub:'Unity · Isométrico · En desarrollo',
+        href:'#proyectos',
+      },
+      {
+        img: null, icon:'🗡️', color:'#2a3a22',
+        label:'Dungeon Crawler · 2D',
+        title:'Dungeon Crawler 2D',
+        sub:'Unity · Procedural BSP · State Machine',
+        href:'#proyectos',
+      },
+      {
+        img: null, icon:'🏋️', color:'#38280a',
+        label:'Gym Sim · Game Jam',
+        title:'Gym Management Sim',
+        sub:'Unity · UI Toolkit · 72h Game Jam',
+        href:'#proyectos',
+      },
+    ];
+
+    function HeroCarousel({ lang }) {
+      const [idx, setIdx]       = useState(0);
+      const [swipeX, setSwipeX] = useState(null);
+      const [animated, setAnimated] = useState(true);
+      const timer = useRef(null);
+      const total = HERO_SLIDES.length;
+
+      const go = useCallback(n => {
+        setAnimated(true);
+        setIdx(i => (i + n + total) % total);
+      }, [total]);
+
+      const pause  = () => clearInterval(timer.current);
+      const resume = () => { timer.current = setInterval(() => go(1), 4000); };
+
+      useEffect(() => { resume(); return () => clearInterval(timer.current); }, [go]);
+
+      const onTouchStart = e => { pause(); setSwipeX(e.touches[0].clientX); };
+      const onTouchEnd   = e => {
+        if (swipeX === null) return;
+        const diff = swipeX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 42) go(diff > 0 ? 1 : -1);
+        setSwipeX(null); resume();
+      };
+      const onMouseDown  = e => { pause(); setSwipeX(e.clientX); };
+      const onMouseUp    = e => {
+        if (swipeX === null) return;
+        const diff = swipeX - e.clientX;
+        if (Math.abs(diff) > 42) go(diff > 0 ? 1 : -1);
+        setSwipeX(null); resume();
+      };
+
+      const s = HERO_SLIDES[idx];
+
+      // For OGAM slides, use the uploaded images from Claude context
+      const IMG_MAP = {
+        0: '/mnt/user-data/uploads/1777778886931_image.png',
+        1: '/mnt/user-data/uploads/1777778928827_image.png',
+      };
+
+      return (
+        <div
+          className="hero-carousel"
+          onMouseEnter={pause} onMouseLeave={resume}
+          onMouseDown={onMouseDown} onMouseUp={onMouseUp}
+          onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
+          style={{cursor: swipeX!==null ? 'grabbing' : 'grab'}}
+        >
+          {/* Track */}
+          <div
+            className="hc-track"
+            style={{transform:`translateX(-${idx*100}%)`, transition: animated ? undefined : 'none'}}
+          >
+            {HERO_SLIDES.map((sl, i) => (
+              <div className="hc-slide" key={i}>
+                <div style={{
+                  width:'100%',height:'100%',
+                  display:'flex',flexDirection:'column',
+                  alignItems:'center',justifyContent:'center',gap:16,
+                  background: sl.color,
+                  position:'relative',
+                }}>
+                  {/* decorative grid */}
+                  <div style={{
+                    position:'absolute',inset:0,
+                    backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
+                    backgroundSize:'24px 24px',
+                  }}/>
+                  {/* decorative circle */}
+                  <div style={{
+                    position:'absolute',
+                    width:'min(60%,280px)',aspectRatio:'1',
+                    borderRadius:'50%',
+                    border:'1px dashed rgba(255,255,255,.12)',
+                  }}/>
+                  <span style={{fontSize:56,filter:'drop-shadow(0 4px 20px rgba(0,0,0,.5))',position:'relative',zIndex:1}}>{sl.icon}</span>
+                  <span style={{fontFamily:'var(--mono)',fontSize:10,letterSpacing:'.14em',textTransform:'uppercase',color:'rgba(255,255,255,.45)',position:'relative',zIndex:1}}>{sl.label}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Left gradient — makes text readable */}
+          <div style={{
+            position:'absolute',inset:0,zIndex:1,pointerEvents:'none',
+            background:'linear-gradient(90deg,var(--bg) 0%,rgba(239,231,212,.65) 18%,transparent 46%)',
+          }}/>
+
+          {/* Arrows */}
+          <button className="hc-arrow l" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(-1);pause();resume();}}>‹</button>
+          <button className="hc-arrow r" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(1); pause();resume();}}>›</button>
+
+          {/* Thumbnail strip */}
+          <div className="hc-thumbs" style={{zIndex:4}}>
+            {HERO_SLIDES.map((sl,i) => (
+              <div
+                key={i}
+                className={`hc-thumb${i===idx?' on':''}`}
+                onClick={e=>{e.stopPropagation();setIdx(i);pause();resume();}}
+              >
+                <div className="hc-thumb-icon" style={{background:sl.color}}>
+                  <span style={{fontSize:14}}>{sl.icon}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Info overlay */}
+          <div className="hc-info" style={{zIndex:4}}>
+            <a href={s.href} style={{textDecoration:'none'}} onClick={e=>e.stopPropagation()}>
+              <div className="hc-title-pill">{s.title}</div>
+            </a>
+            <div className="hc-label-pill">{s.sub}</div>
+          </div>
+
+          {/* Dots */}
+          <div className="hc-controls" style={{zIndex:4}}>
+            {HERO_SLIDES.map((_,i) => (
+              <button key={i} className={`hc-dot${i===idx?' on':''}`}
+                onClick={e=>{e.stopPropagation();setIdx(i);pause();resume();}}/>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════
+       PROJECT SLIDER (cards)
+    ═══════════════════════════════════════ */
+    function Slider({slides}){
+      const [idx,setIdx]=useState(0);
+      const timer=useRef(null);
+      const go=useCallback(n=>setIdx(i=>(i+n+slides.length)%slides.length),[slides.length]);
+      const pause=()=>clearInterval(timer.current);
+      const resume=()=>{timer.current=setInterval(()=>go(1),3600);};
+      useEffect(()=>{resume();return()=>clearInterval(timer.current);},[go]);
+      return(
+        <div className="slider-wrap" onMouseEnter={pause} onMouseLeave={resume}>
+          <div className="slider-track" style={{transform:`translateX(-${idx*100}%)`}}>
+            {slides.map((s,i)=>(
+              <div className="slide" key={i} style={{background:s.color,position:"relative"}}>
+                {/* Decorative grid lines */}
+                <div style={{position:"absolute",inset:0,
+                  backgroundImage:"linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)",
+                  backgroundSize:"20px 20px"}}/>
+                {s.img
+                  ? <img src={s.img} alt={s.label} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0}}/>
+                  : <>
+                      <span style={{fontSize:34,position:"relative",zIndex:1,filter:"drop-shadow(0 2px 8px rgba(0,0,0,.4))"}}>{s.icon}</span>
+                      <span style={{fontFamily:"var(--mono)",fontSize:9,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",position:"relative",zIndex:1}}>{s.label}</span>
+                      <span style={{position:"absolute",bottom:10,right:10,fontFamily:"var(--mono)",fontSize:8,color:"rgba(255,255,255,.2)",letterSpacing:".08em",zIndex:1}}>📷 screenshot pendiente</span>
+                    </>
+                }
+              </div>
+            ))}
+          </div>
+          {slides.length>1&&<>
+            <button className="sarr l" onClick={()=>go(-1)}>‹</button>
+            <button className="sarr r" onClick={()=>go(1)}>›</button>
+            <div className="slider-dots">
+              {slides.map((_,i)=><button key={i} className={`dot${i===idx?" active":""}`} onClick={()=>setIdx(i)}/>)}
+            </div>
+          </>}
+        </div>
+      );
+    }
+
+    function ProjCard({p,lang}){
+      const isActive = p.statusEs==="En desarrollo";
+      return(
+        <div className="proj-card reveal">
+          <Slider slides={p.slides}/>
+          <div className="card-body">
+            <div className="card-num">{p.num} /</div>
+            <div className="card-title">{p.title}</div>
+            <div className="card-sub">{p.sub}</div>
+            <div className="project-meta">
+              <span className="project-status">{lang==="es"?p.statusEs:p.statusEn}</span>
+              <span className="project-focus">{lang==="es"?p.focusEs:p.focusEn}</span>
+              <span className="project-focus">{p.year}</span>
+            </div>
+            <p className="card-desc">{lang==="es"?p.es:p.en}</p>
+            <div className="card-tags">{p.tags.map(t=><span className="card-tag" key={t}>{t}</span>)}</div>
+            <div className="card-links">
+              {p.links.map(l=><a key={l.l} href={l.h} className="card-link" target="_blank" rel="noreferrer">{l.l} ↗</a>)}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function CVDropdown({lang}){
+      const [open,setOpen]=useState(false);
+      const ref=useRef(null);
+      useEffect(()=>{
+        const fn=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};
+        document.addEventListener("mousedown",fn);
+        return()=>document.removeEventListener("mousedown",fn);
+      },[]);
+      return(
+        <div className="cv-wrap" ref={ref}>
+          <button className="btn-line" onClick={()=>setOpen(o=>!o)}>↓ {lang==="es"?"Descargar CV":lang==="pt"?"Baixar CV":"Download CV"} ▾</button>
+          {open&&(
+            <div className="cv-menu">
+              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_ES.docx" download>🇦🇷 Español</a>
+              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_EN.docx" download>🇺🇸 English</a>
+              <a className="cv-opt" href="/mnt/user-data/uploads/CV_Geronimo_Odriozola_PT.docx" download>🇧🇷 Português</a>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function useReveal(){
+      useEffect(()=>{
+        const els=document.querySelectorAll(".reveal");
+        const io=new IntersectionObserver(
+          entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),
+          {threshold:.07,rootMargin:"0px 0px -28px 0px"}
+        );
+        els.forEach(el=>io.observe(el));
+        return()=>io.disconnect();
+      });
+    }
+
+    /* Hash scroll — runs once after React mounts the DOM.
+       Without this, clicking a nav link on first load lands
+       at the wrong position because React hasn't painted yet. */
+    function useHashScroll(){
+      useEffect(()=>{
+        const hash = window.location.hash;
+        if(!hash) return;
+        // Small delay lets React finish painting all sections
+        const id = setTimeout(()=>{
+          const el = document.querySelector(hash);
+          if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+        }, 120);
+        return () => clearTimeout(id);
+      }, []); // runs once on mount
+    }
+
+    /* ═══════════════════════════════════════
+       APP
+    ═══════════════════════════════════════ */
+    function App(){
+      const [lang,setLang]=useState("es");
+      const [dark,setDark]=useState(false);
+      const [dropped,setDropped]=useState({status:false,tools:false,map:false});
+      const [eggVisible,setEggVisible]=useState(false);
+
+      useEffect(()=>{
+        document.documentElement.classList.toggle("dark",dark);
+        document.body.style.background="";
+      },[dark]);
+      useReveal();
+      useHashScroll();
+
+      const handleDrop = useCallback((key, inside) => {
+        setDropped(prev => {
+          const next = {...prev, [key]: inside};
+          if (next.status && next.tools && next.map) {
+            setTimeout(() => setEggVisible(true), 300);
+          }
+          return next;
+        });
+      }, []);
+
+      const t=(es,en,pt)=>lang==="pt"?(pt||en):lang==="en"?en:es;
+      const nextLang=()=>setLang(l=>l==="es"?"en":l==="en"?"pt":"es");
+      const langLabel=lang==="es"?"EN":lang==="en"?"PT":"ES";
+
+      return(
+        <>
+          <style>{CSS}</style>
+
+          {/* NAV */}
+          <nav className="nav">
+            <div className="nav-name">
+              <span>Gerodrix</span>.dev
+            </div>
+            <div className="nav-links">
+              <a href="#about">{t("Sobre mí","About","Sobre mim")}</a>
+              <a href="#skills">Stack</a>
+              <a href="#soft">{t("Soft skills","Soft skills","Soft skills")}</a>
+              <a href="#proyectos">{t("Proyectos","Projects","Projetos")}</a>
+              <a href="#contacto">{t("Contacto","Contact","Contato")}</a>
+            </div>
+            <div className="nav-controls">
+              <button className="ctrl" onClick={nextLang}>{langLabel}</button>
+              <button className={`ctrl${dark?" on":""}`} onClick={()=>setDark(d=>!d)}>
+                {dark?"☀ Light":"◐ Dark"}
+              </button>
+            </div>
+          </nav>
+
+          <EasterEgg visible={eggVisible} onClose={()=>setEggVisible(false)}/>
+
+          {/* HERO */}
+          <section className="hero">
+            <div className="hero-grain"/>
+
+            {/* Text content — clean, no widgets inside */}
+            <div className="hero-left">
+              <div className="avail fi"><div className="avail-dot"/>{t("Disponible para trabajar","Available for work","Disponível para trabalhar")}</div>
+              <p className="hero-overline fi fi1">Game Developer Jr. · C# / Unity / Godot · Buenos Aires 🇦🇷</p>
+              <h1 className="hero-name fi fi2">Geronimo<br/><em>Odriozola</em></h1>
+              <p className="hero-desc fi fi3">{t(
+                <>Desarrollador de videojuegos <strong>en formación</strong> con base en C#, Unity y Godot. Mecánicas funcionales, sistemas de combate y generación procedural. Expandiéndome en QA Testing.</>,
+                <>Game developer <strong>in training</strong> with a foundation in C#, Unity and Godot. Functional mechanics, combat systems, and procedural generation. Currently expanding into QA Testing.</>,
+                <>Desenvolvedor de jogos <strong>em formação</strong> com base em C#, Unity e Godot. Mecânicas funcionais, sistemas de combate e geração procedural. Aprofundando-me em QA Testing.</>
+              )}</p>
+              <div className="hero-actions fi fi4">
+                <a href="#proyectos" className="btn-fill">{t("Ver proyectos","See projects","Ver projetos")}</a>
+                <CVDropdown lang={lang}/>
+                <span className="hero-loc">{t("Remoto o Buenos Aires","Remote or Buenos Aires","Remoto ou Buenos Aires")}</span>
+              </div>
+            </div>
+
+            {/* Draggable widgets + drop zones */}
+            <div className="hero-widgets">
+
+              <DropZones dropped={dropped}/>
+
+              <DraggableWidget widgetKey="status" title="status.board" onDrop={handleDrop}
+                defaultPos={{x:520, y:60}} style={{width:230,transform:"rotate(-1deg)"}}>
+                {[
+                  [t("rol","role","função"),"Game Dev Jr."],
+                  ["location","Buenos Aires"],
+                  ["stack","Unity · C# · Godot"],
+                  ["QA","BairesDev · 2025"],
+                  [t("idiomas","languages","idiomas"),"ES · EN · PT"],
+                  [t("proyectos","projects","projetos"),"5 en portfolio"],
+                  [t("disponible","available","disponível"),t("Inmediata","Immediate","Imediata")],
+                ].map(([k,v])=>(
+                  <div className="status-row" key={k}><span>{k}</span><strong>{v}</strong></div>
+                ))}
+              </DraggableWidget>
+
+              <DraggableWidget widgetKey="tools" title="core.tools" onDrop={handleDrop}
+                defaultPos={{x:770, y:60}} style={{width:200,transform:"rotate(1.2deg)"}}>
+                <div className="mini-pills">
+                  {["Unity","C#","Godot 4","Blender","Git","QA","Scrum","VS Code"].map(n=>(
+                    <span className="mini-pill" key={n}>{n}</span>
+                  ))}
+                </div>
+              </DraggableWidget>
+
+              <DraggableWidget widgetKey="map" title="project.map" onDrop={handleDrop}
+                defaultPos={{x:520, y:340}} style={{width:260,transform:"rotate(.4deg)"}}>
+                {PROJECTS.map(p=>(
+                  <div className="status-row" key={p.num}>
+                    <span style={{color:"var(--mut)",width:18,flexShrink:0}}>{p.num}</span>
+                    <span style={{flex:1}}>{p.title}</span>
+                    <span style={{
+                      fontSize:8,padding:"2px 6px",borderRadius:999,
+                      background:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"var(--ac)":"var(--sur2)",
+                      color:(p.statusEs==="En desarrollo"||p.statusEs==="Publicado")?"#fff8ea":"var(--mut)",
+                      border:"1px solid var(--bo)",flexShrink:0,
+                    }}>{lang==="es"?p.statusEs:p.statusEn}</span>
+                  </div>
+                ))}
+                <div className="mini-map"/>
+              </DraggableWidget>
+
+            </div>
+
+            {/* Carousel — right side, desktop only */}
+            <HeroCarousel lang={lang}/>
+          </section>
+
+          {/* ABOUT */}
+          <section className="section alt reveal" id="about">
+            <div className="sec-hdr">
+              <span className="sec-num">01</span>
+              <h2 className="sec-title">{t("Sobre mí","About me","Sobre mim")}</h2>
+              <div className="module-tabs">
+                <span className="module-tab live">profile.active</span>
+                <span className="module-tab">{t("disponible","available","disponível")}</span>
+              </div>
+            </div>
+
+            {/* Profile card */}
+            <div className="profile-card">
+              <div className="profile-card-top">
+                <div className="profile-mark">GO</div>
+                <div>
+                  <div className="profile-role">Game Developer Jr.</div>
+                  <div className="profile-name">Geronimo Odriozola</div>
+                </div>
+              </div>
+              <div className="profile-focus">
+                <div className="focus-cell"><strong>Unity/C#</strong>{t("Principal","Primary","Principal")}</div>
+                <div className="focus-cell"><strong>Godot 4</strong>{t("Secundario","Secondary","Secundário")}</div>
+                <div className="focus-cell"><strong>QA</strong>{t("En curso","In progress","Em andamento")}</div>
+              </div>
+            </div>
+
+            <div className="about-grid">
+              <div className="about-body">
+                <p>{t(
+                  <><strong>Desarrollador de videojuegos junior</strong> cursando la Licenciatura en Desarrollo y Producción de Videojuegos en UNPAZ. Construyo mecánicas funcionales, sistemas de combate y generación procedural en Unity y Godot 4.</>,
+                  <>Junior <strong>game developer</strong> pursuing a degree in Video Game Development at UNPAZ. I build functional mechanics, combat systems, and procedural generation in Unity and Godot 4.</>,
+                  <>Desenvolvedor de jogos <strong>júnior</strong> cursando Desenvolvimento de Videogames na UNPAZ. Construo mecânicas funcionais, sistemas de combate e geração procedural em Unity e Godot 4.</>
+                )}</p>
+                <p>{t(
+                  <>Mi experiencia en <strong>ventas consultivas en Fiat y Renault</strong> me enseñó comunicación efectiva con stakeholders, trabajo orientado a KPIs y seguimiento de cartera via CRM.</>,
+                  <>My experience in <strong>consultative sales at Fiat and Renault</strong> gave me effective stakeholder communication, KPI-driven work, and CRM portfolio management.</>,
+                  <>Minha experiência em <strong>vendas consultivas na Fiat e Renault</strong> me ensinou comunicação efetiva com stakeholders, trabalho orientado a KPIs e gestão de carteira via CRM.</>
+                )}</p>
+                <p>{t(
+                  "Sumando QA Testing (BairesDev 2025) y C# Masterclass (Udemy 2025) al stack. Personal Trainer freelance con 15+ clientes simultáneos desde 2022.",
+                  "Currently adding QA Testing (BairesDev 2025) and C# Masterclass (Udemy 2025). Freelance Personal Trainer with 15+ concurrent clients since 2022.",
+                  "Adicionando QA Testing (BairesDev 2025) e C# Masterclass (Udemy 2025). Personal Trainer freelance com 15+ clientes simultâneos desde 2022."
+                )}</p>
+              </div>
+              <div>
+                {[
+                  [t("Ubicación","Location","Localização"),"Buenos Aires, AR"],
+                  [t("Carrera","Degree","Curso"),"UNPAZ · 2024→"],
+                  ["Stack","Unity · C# · Godot"],
+                  ["QA","BairesDev · 2025"],
+                  [t("Proyectos","Projects","Projetos"),"4"],
+                  [t("Idiomas","Languages","Idiomas"),"ES · EN · PT"],
+                  [t("Modalidad","Work mode","Modalidade"),t("Remoto · Híbrido","Remote · Hybrid","Remoto · Híbrido")],
+                ].map(([l,v])=>(
+                  <div className="fact" key={l}>
+                    <span className="fact-label">{l}</span>
+                    <span className="fact-value">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="stack-note" style={{marginTop:20}}>
+              {["Unity","C#","Godot 4","GDScript","Blender","Git","QA Testing","Scrum","HTML/CSS/JS"].map(s=>(
+                <span key={s}>{s}</span>
+              ))}
+            </div>
+            <div className="trait-strip" style={{marginTop:12}}>
+              {[["🇦🇷","Español","Nativo"],["🇺🇸","English","B2"],["🇧🇷","Português","B2"]].map(([f,l,lv])=>(
+                <span key={l}>{f} {l} · {lv}</span>
+              ))}
+            </div>
+          </section>
+
+          {/* TECH STACK */}
+          <section className="section reveal" id="skills">
+            <div className="sec-hdr">
+              <span className="sec-num">02</span>
+              <h2 className="sec-title">Tech Stack</h2>
+              <div className="module-tabs">
+                <span className="module-tab live">core.tools</span>
+              </div>
+            </div>
+            {SKILLS.map(({label,tags})=>(
+              <div className="skill-group" key={label}>
+                <span className="sg-label">{label}</span>
+                <div className="sg-tags">
+                  {tags.map(({name,icon,main})=>(
+                    <span className={`sg-tag${main?" main":""}`} key={name}>
+                      <Icon id={icon}/>
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </section>
+
+          {/* SOFT SKILLS */}
+          <section className="section alt reveal" id="soft">
+            <div className="sec-hdr">
+              <span className="sec-num">03</span>
+              <h2 className="sec-title">{t("Habilidades blandas","Soft skills","Habilidades interpessoais")}</h2>
+              <div className="module-tabs">
+                <span className="module-tab">soft.skills</span>
+              </div>
+            </div>
+            <div className="soft-grid">
+              {SOFT.map(s=>{
+                const d=lang==="es"?s.es:s.en;
+                return(
+                  <div className="soft-card reveal" key={d[0]}>
+                    <span className="soft-icon">{s.icon}</span>
+                    <div className="soft-title">{d[0]}</div>
+                    <p className="soft-desc">{d[1]}</p>
+                    <span className="soft-example">{d[2]}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* PROJECTS */}
+          <section className="section reveal" id="proyectos">
+            <div className="sec-hdr">
+              <span className="sec-num">04</span>
+              <h2 className="sec-title">{t("Proyectos","Projects","Projetos")}</h2>
+              <div className="module-tabs">
+                <span className="module-tab live">portfolio.board</span>
+              </div>
+            </div>
+            <div className="proj-grid">
+              {PROJECTS.map(p=><ProjCard key={p.num} p={p} lang={lang}/>)}
+            </div>
+          </section>
+
+          {/* CONTACT */}
+          <section className="section alt reveal" id="contacto">
+            <div className="sec-hdr">
+              <span className="sec-num">05</span>
+              <h2 className="sec-title">{t("Contacto","Contact","Contato")}</h2>
+              <div className="module-tabs">
+                <span className="module-tab">contact.channel</span>
+                <span className="module-tab live">open.to.work</span>
+              </div>
+            </div>
+            <div className="contact-grid">
+              <div>
+                <div className="contact-note">{t("Disponible para trabajar","Available for work","Disponível para trabalhar")}</div>
+                <p className="ci">{t(
+                  "Busco mi primera oportunidad en Game Dev como junior, trainee o en equipo indie. También abierto a QA Testing y proyectos freelance.",
+                  "Looking for my first Game Dev opportunity as a junior, trainee, or indie team member. Also open to QA Testing and freelance projects.",
+                  "Busco minha primeira oportunidade em Game Dev como júnior, trainee ou membro de equipe indie. Aberto a QA Testing e freelance."
+                )}</p>
+                <p className="ci" style={{fontSize:12,color:"var(--mut)"}}>
+                  {t("Respondo en menos de 24h.","Reply time: under 24h.","Respondo em menos de 24h.")}
+                </p>
+                <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:20}}>
+                  <a href="mailto:odriozolageronimo@gmail.com" className="btn-fill">
+                    {t("Escribirme","Email me","Escrever")}
+                  </a>
+                  <CVDropdown lang={lang}/>
+                </div>
+              </div>
+              <div>
+                {[
+                  ["✉","Email","odriozolageronimo@gmail.com","mailto:odriozolageronimo@gmail.com"],
+                  ["in","LinkedIn","linkedin.com/in/geronimo-odriozola","https://www.linkedin.com/in/geronimo-odriozola/"],
+                  ["⬡","GitHub","github.com/Gerodrix","https://github.com/Gerodrix"],
+                  ["📞",t("Teléfono","Phone","Telefone"),"11 3411-4990","tel:+541134114990"],
+                ].map(([ic,l,v,h])=>(
+                  <a className="c-row" key={l} href={h} target="_blank" rel="noreferrer">
+                    <span className="c-label">{ic} {l}</span>
+                    <span className="c-val">{v}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <footer>
+            <span>© 2025 Geronimo Odriozola</span>
+            <span className="fac">{t("Hecho con React · Buenos Aires 🇦🇷","Built with React · Buenos Aires 🇦🇷","Feito com React · Buenos Aires 🇦🇷")}</span>
+          </footer>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>
