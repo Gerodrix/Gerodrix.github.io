@@ -3,15 +3,60 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Geronimo Odriozola — Game Developer</title>
-  <meta name="description" content="Portfolio de Geronimo Odriozola — Game Developer Jr. Unity, C#, Godot, Buenos Aires."/>
+
+  <!-- SEO -->
+  <title>Geronimo Odriozola — Game Developer Jr. | Unity · C# · Godot</title>
+  <meta name="description" content="Portfolio de Geronimo Odriozola, Game Developer Jr. en Buenos Aires. Unity, C#, Godot 4, QA Testing. Disponible para roles junior, equipos indie y freelance."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://Gerodrix.github.io/"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website"/>
+  <meta property="og:url"         content="https://Gerodrix.github.io/"/>
+  <meta property="og:title"       content="Geronimo Odriozola — Game Developer Jr."/>
+  <meta property="og:description" content="Game Dev Jr. Buenos Aires. Unity, C#, Godot 4, QA Testing. Portfolio con proyectos reales."/>
+  <meta property="og:locale"      content="es_AR"/>
+  <meta property="og:locale:alternate" content="en_US"/>
+  <meta property="og:locale:alternate" content="pt_BR"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary"/>
+  <meta name="twitter:title"       content="Geronimo Odriozola — Game Developer Jr."/>
+  <meta name="twitter:description" content="Game Dev Jr. Buenos Aires. Unity · C# · Godot 4."/>
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Geronimo Odriozola","url":"https://Gerodrix.github.io","jobTitle":"Game Developer Jr.","description":"Game Developer Jr. especializado en Unity, C# y Godot 4. Buenos Aires, Argentina.","address":{"@type":"PostalAddress","addressLocality":"Buenos Aires","addressCountry":"AR"},"sameAs":["https://github.com/Gerodrix","https://www.linkedin.com/in/geronimo-odriozola/"],"knowsAbout":["Unity","C#","Godot 4","Game Development","QA Testing","Scrum"],"email":"odriozolageronimo@gmail.com"}</script>
+
+  <!-- Fonts: preconnect + non-blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" media="print" onload="this.media='all'"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"/></noscript>
+
+  <!-- Preconnect CDN -->
+  <link rel="preconnect" href="https://unpkg.com"/>
+
+  <!-- Critical CSS -->
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body,#root{min-height:100vh;}
-    body{background:#efe7d4;overflow-x:hidden;}
+    body{background:#efe7d4;overflow-x:hidden;font-family:'Libre Baskerville',Georgia,serif;color:#2f291f;}
+    /* Skip link */
+    .skip-link{position:absolute;top:-40px;left:16px;z-index:9999;background:#5f7747;color:#fff8ea;padding:8px 14px;border-radius:0 0 6px 6px;font-family:'DM Mono',monospace;font-size:11px;text-decoration:none;transition:top .2s;}
+    .skip-link:focus{top:0;}
+    /* Focus visible */
+    :focus-visible{outline:2px solid #5f7747;outline-offset:3px;border-radius:3px;}
+    /* Reduced motion */
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}}
+    /* Skeleton prevents CLS */
+    .nav{min-height:54px;}
+    .hero{min-height:calc(100vh - 54px);}
   </style>
 </head>
 <body>
+  <!-- Skip to content for keyboard/screen reader users -->
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+
   <div id="root"></div>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -23,7 +68,8 @@
        CSS — exact garden-os.css
     ═══════════════════════════════════════ */
     const CSS = `
-      @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+      /* Fonts loaded via <head> — no @import needed here */
+      /* ── GARDEN OS PALETTE ── */
 
       :root {
         --bg:#efe7d4; --sur:#f8f2e5; --sur2:#e8dec7;
@@ -817,21 +863,20 @@
         };
         const onUp = e => {
           setDragging(false);
-          // Check if widget center is inside the named drop zone
           if (!ref.current) return;
+          // Find this widget's drop zone by data-key
           const zone = document.querySelector(`.drop-zone[data-key="${widgetKey}"]`);
           if (!zone) return;
           const wRect = ref.current.getBoundingClientRect();
           const zRect = zone.getBoundingClientRect();
-          const cx = wRect.left + wRect.width/2;
-          const cy = wRect.top  + wRect.height/2;
-          const inside = cx >= zRect.left && cx <= zRect.right && cy >= zRect.top && cy <= zRect.bottom;
-          if (inside) {
-            setLanded(true);
-            onDrop(widgetKey, true);
-          } else {
-            onDrop(widgetKey, false);
-          }
+          // Check if widget center overlaps with zone
+          const cx = wRect.left + wRect.width  / 2;
+          const cy = wRect.top  + wRect.height / 2;
+          const inside =
+            cx >= zRect.left && cx <= zRect.right &&
+            cy >= zRect.top  && cy <= zRect.bottom;
+          setLanded(inside);
+          onDrop(widgetKey, inside);
         };
         window.addEventListener('mousemove', onMove);
         window.addEventListener('mouseup',   onUp);
@@ -873,10 +918,11 @@
        DROP ZONES (rendered inside hero-widgets)
     ═══════════════════════════════════════ */
     function DropZones({ dropped }) {
+      // Zones live in the RIGHT half of the hero — safe from text
       const zones = [
-        { key:'status', label:'status.board', x:'62%', y:'8%',  w:110, h:58 },
-        { key:'tools',  label:'core.tools',   x:'76%', y:'8%',  w:90,  h:58 },
-        { key:'map',    label:'project.map',  x:'62%', y:'52%', w:200, h:58 },
+        { key:'status', label:'status.board', right:340, top:60,  w:130, h:54 },
+        { key:'tools',  label:'core.tools',   right:190, top:60,  w:110, h:54 },
+        { key:'map',    label:'project.map',  right:340, top:320, w:220, h:54 },
       ];
       return (
         <>
@@ -889,14 +935,15 @@
                 data-key={z.key}
                 style={{
                   position:'absolute',
-                  left:z.x, top:z.y,
+                  right:z.right, top:z.top,
                   width:z.w, height:z.h,
                   border: done ? '2px solid var(--ac)' : '2px dashed var(--bos)',
                   borderRadius:9,
-                  background: done ? 'rgba(95,119,71,.13)' : 'rgba(169,152,120,.08)',
+                  background: done ? 'rgba(95,119,71,.13)' : 'rgba(169,152,120,.06)',
                   display:'flex',alignItems:'center',justifyContent:'center',
                   pointerEvents:'none',
                   transition:'all .3s',
+                  zIndex:3,
                 }}
               >
                 <span style={{
@@ -1044,8 +1091,8 @@
           }}/>
 
           {/* Arrows */}
-          <button className="hc-arrow l" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(-1);pause();resume();}}>‹</button>
-          <button className="hc-arrow r" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(1); pause();resume();}}>›</button>
+          <button className="hc-arrow l" aria-label="Slide anterior" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(-1);pause();resume();}}>‹</button>
+          <button className="hc-arrow r" aria-label="Slide siguiente" style={{zIndex:4}} onClick={e=>{e.stopPropagation();go(1); pause();resume();}}>›</button>
 
           {/* Thumbnail strip */}
           <div className="hc-thumbs" style={{zIndex:4}}>
@@ -1231,7 +1278,7 @@
           <style>{CSS}</style>
 
           {/* NAV */}
-          <nav className="nav">
+          <nav className="nav" role="navigation" aria-label={t("Navegación principal","Main navigation","Navegação principal")}>
             <div className="nav-name">
               <span>Gerodrix</span>.dev
             </div>
@@ -1243,8 +1290,8 @@
               <a href="#contacto">{t("Contacto","Contact","Contato")}</a>
             </div>
             <div className="nav-controls">
-              <button className="ctrl" onClick={nextLang}>{langLabel}</button>
-              <button className={`ctrl${dark?" on":""}`} onClick={()=>setDark(d=>!d)}>
+              <button className="ctrl" onClick={nextLang} aria-label={`Cambiar idioma a ${langLabel}`}>{langLabel}</button>
+              <button className={`ctrl${dark?" on":""}`} onClick={()=>setDark(d=>!d)} aria-label={dark?"Activar modo claro":"Activar modo oscuro"}>
                 {dark?"☀ Light":"◐ Dark"}
               </button>
             </div>
@@ -1252,6 +1299,7 @@
 
           <EasterEgg visible={eggVisible} onClose={()=>setEggVisible(false)}/>
 
+          <main id="main-content">
           {/* HERO */}
           <section className="hero">
             <div className="hero-grain"/>
@@ -1506,6 +1554,7 @@
             </div>
           </section>
 
+          </main>
           <footer>
             <span>© 2025 Geronimo Odriozola</span>
             <span className="fac">{t("Hecho con React · Buenos Aires 🇦🇷","Built with React · Buenos Aires 🇦🇷","Feito com React · Buenos Aires 🇦🇷")}</span>
