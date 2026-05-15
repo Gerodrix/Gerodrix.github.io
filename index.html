@@ -70,15 +70,20 @@ body::after{
   opacity:.5;
 }
 
-/* ── SEMI-CIRCLE ACCENTS (background decoration) ── */
-.bg-circle{
-  position:fixed;pointer-events:none;z-index:-1;
-  border-radius:50%;opacity:.18;
-  background:radial-gradient(circle,var(--ac),transparent 70%);
+/* ── SEMI-CIRCLES — cozy hero left decoration ── */
+.bg-circle{position:absolute;pointer-events:none;z-index:1;border-radius:50%;}
+.bg-circle-1{
+  width:480px;height:480px;left:-160px;top:5%;
+  background:radial-gradient(circle,rgba(95,119,71,.16) 0%,rgba(95,119,71,.05) 55%,transparent 75%);
 }
-.bg-circle-1{width:600px;height:600px;right:-200px;top:-150px;}
-.bg-circle-2{width:400px;height:400px;left:-120px;bottom:10%;}
-.bg-circle-3{width:300px;height:300px;right:15%;bottom:-80px;}
+.bg-circle-2{
+  width:300px;height:300px;left:-60px;bottom:6%;
+  background:radial-gradient(circle,rgba(123,156,160,.14) 0%,rgba(123,156,160,.04) 55%,transparent 75%);
+}
+.bg-circle-3{
+  width:200px;height:200px;left:28%;top:18%;
+  background:radial-gradient(circle,rgba(185,121,62,.10) 0%,transparent 70%);
+}
 
 /* ── SCROLLBAR ────────────────────────────── */
 ::-webkit-scrollbar{width:8px;}
@@ -194,13 +199,13 @@ nav{
   overflow:hidden;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;
 }
-/* left fade so text stays readable */
+/* left fade — subtle, no dark blob */
 .hc-slide::before{
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(90deg,var(--bg) 0%,rgba(239,231,212,.45) 20%,transparent 48%);
+  background:linear-gradient(90deg,rgba(239,231,212,.22) 0%,transparent 35%);
 }
 .dark .hc-slide::before{
-  background:linear-gradient(90deg,var(--bg) 0%,rgba(39,35,29,.45) 20%,transparent 48%);
+  background:linear-gradient(90deg,rgba(39,35,29,.22) 0%,transparent 35%);
 }
 .hc-icon{font-size:56px;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));position:relative;z-index:2;}
 .hc-label{
@@ -552,11 +557,6 @@ footer span{font-family:var(--mono);font-size:9px;color:var(--mut);}
 <body>
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
-<!-- Semi-circle background accents -->
-<div class="bg-circle bg-circle-1" aria-hidden="true"></div>
-<div class="bg-circle bg-circle-2" aria-hidden="true"></div>
-<div class="bg-circle bg-circle-3" aria-hidden="true"></div>
-
 <!-- NAV -->
 <nav aria-label="Navegación principal">
   <div class="nav-name"><span>Gerodrix</span>.dev</div>
@@ -575,8 +575,10 @@ footer span{font-family:var(--mono);font-size:9px;color:var(--mut);}
 
 <!-- HERO -->
 <section id="hero" aria-label="Presentación">
-  <div class="hero-left">
-    <div class="avail fi"><div class="avail-dot"></div><span id="avail-text">Disponible para trabajar</span></div>
+  <div class="bg-circle bg-circle-1" aria-hidden="true"></div>
+  <div class="bg-circle bg-circle-2" aria-hidden="true"></div>
+  <div class="bg-circle bg-circle-3" aria-hidden="true"></div>
+  <div class="hero-left"><div class="avail-dot"></div><span id="avail-text">Disponible para trabajar</span></div>
     <p class="hero-overline fi fi1" id="hero-overline">Game Developer Jr. · C# / Unity / Godot · Buenos Aires 🇦🇷</p>
     <h1 class="hero-name fi fi2">Geronimo<br><em>Odriozola</em></h1>
     <p class="hero-desc fi fi3" id="hero-desc">Desarrollador de videojuegos <strong>en formación</strong> con base en C#, Unity y Godot. Mecánicas funcionales, sistemas de combate y generación procedural. Expandiéndome en QA Testing.</p>
@@ -606,19 +608,19 @@ footer span{font-family:var(--mono);font-size:9px;color:var(--mut);}
 
   <!-- Draggable widgets layer -->
   <div id="hero-widgets" aria-hidden="true">
-    <!-- Drop zones -->
-    <div class="drop-zone" id="dz-status" style="width:140px;height:54px;top:68px;right:380px">
+    <!-- Drop zones — centered in hero, not pushed to the right edge -->
+    <div class="drop-zone" id="dz-status" style="width:140px;height:54px;top:68px;left:52%">
       <span id="dz-status-label">status.board</span>
     </div>
-    <div class="drop-zone" id="dz-tools" style="width:120px;height:54px;top:68px;right:230px">
+    <div class="drop-zone" id="dz-tools" style="width:120px;height:54px;top:68px;left:68%">
       <span id="dz-tools-label">core.tools</span>
     </div>
-    <div class="drop-zone" id="dz-map" style="width:220px;height:54px;top:380px;right:230px">
+    <div class="drop-zone" id="dz-map" style="width:220px;height:54px;top:380px;left:52%">
       <span id="dz-map-label">project.map</span>
     </div>
 
     <!-- Widget: status.board -->
-    <div class="dwidget" id="w-status" style="width:220px;top:130px;right:560px">
+    <div class="dwidget" id="w-status" style="width:220px;top:130px;left:52%">
       <div class="dw-bar" data-widget="w-status">
         <div class="dw-dots"><div class="dw-dot r"></div><div class="dw-dot y"></div><div class="dw-dot g"></div></div>
         status.board
@@ -627,7 +629,7 @@ footer span{font-family:var(--mono);font-size:9px;color:var(--mut);}
     </div>
 
     <!-- Widget: core.tools -->
-    <div class="dwidget" id="w-tools" style="width:190px;top:130px;right:340px">
+    <div class="dwidget" id="w-tools" style="width:190px;top:130px;left:68%">
       <div class="dw-bar" data-widget="w-tools">
         <div class="dw-dots"><div class="dw-dot r"></div><div class="dw-dot y"></div><div class="dw-dot g"></div></div>
         core.tools
@@ -638,7 +640,7 @@ footer span{font-family:var(--mono);font-size:9px;color:var(--mut);}
     </div>
 
     <!-- Widget: project.map -->
-    <div class="dwidget" id="w-map" style="width:250px;top:420px;right:370px">
+    <div class="dwidget" id="w-map" style="width:250px;top:420px;left:54%">
       <div class="dw-bar" data-widget="w-map">
         <div class="dw-dots"><div class="dw-dot r"></div><div class="dw-dot y"></div><div class="dw-dot g"></div></div>
         project.map
