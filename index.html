@@ -728,6 +728,74 @@
     .footer-made { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
     .footer-made span { color: var(--accent); }
 
+        /* ── Game Cards ── */
+    .game-card {
+      cursor: pointer;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--card-bg, #111);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .game-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+
+    .game-card__thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .game-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .game-card__play {
+      position: absolute;
+      font-size: 2rem;
+      opacity: .85;
+      pointer-events: none;
+    }
+    .game-card__info { padding: .75rem 1rem 1rem; }
+    .game-card__tag {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent, #FF7A00);
+    }
+    .game-card__info h3 { margin: .25rem 0 .15rem; font-size: 1rem; }
+    .game-card__info p  { margin: 0; font-size: .8rem; opacity: .6; }
+
+    /* ── Modal ── */
+    .gmodal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .gmodal[hidden] { display: none; }
+
+    .gmodal__overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(4px);
+    }
+    .gmodal__box {
+      position: relative;
+      background: #111;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: min(640px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .gmodal__close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none;
+      color: #fff; font-size: 1.1rem;
+      cursor: pointer; opacity: .6;
+      transition: opacity .15s;
+    }
+    .gmodal__close:hover { opacity: 1; }
+
+    .gmodal__title { margin: 0 0 .5rem; font-size: 1.2rem; }
+    .gmodal__desc  { font-size: .9rem; opacity: .75; margin: 0 0 .4rem; }
+    .gmodal__tags  { font-size: .75rem; opacity: .5; margin: 0 0 1rem; }
+
+    .gmodal__video { position: relative; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; }
+    .gmodal__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+
     /* ── PROJECT CARD PREVIEW ── */
     .project-card { cursor: pointer; }
     .project-thumb {
@@ -981,6 +1049,24 @@
   </div>
 </div>
 
+<!-- Modal gameplay -->
+<div id="game-modal" class="gmodal" role="dialog" aria-modal="true" aria-label="Gameplay" hidden>
+  <div class="gmodal__overlay"></div>
+  <div class="gmodal__box">
+    <button class="gmodal__close" aria-label="Cerrar">✕</button>
+    <h2 class="gmodal__title"></h2>
+    <p class="gmodal__desc"></p>
+    <p class="gmodal__tags"></p>
+    <div class="gmodal__video">
+      <iframe id="game-iframe" 
+              src="" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
 <!-- ABOUT -->
 <section id="about">
   <div class="section-inner">
@@ -1385,7 +1471,43 @@
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+  // ── Game modal ──────────────────────────────
+  (function () {
+    const modal    = document.getElementById('game-modal');
+    const iframe   = document.getElementById('game-iframe');
+    const title    = modal.querySelector('.gmodal__title');
+    const desc     = modal.querySelector('.gmodal__desc');
+    const tags     = modal.querySelector('.gmodal__tags');
+    const closeBtn = modal.querySelector('.gmodal__close');
+    const overlay  = modal.querySelector('.gmodal__overlay');
 
+    function open(card) {
+      const videoId = card.dataset.video;
+      title.textContent = card.dataset.title;
+      desc.textContent  = card.dataset.desc;
+      tags.textContent  = card.dataset.tags;
+      iframe.src = videoId
+        ? `https://www.youtube.com/embed/${videoId}?autoplay=1`
+        : '';
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      modal.hidden = true;
+      iframe.src = '';           // para el video
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('click', () => open(card));
+    });
+
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  })();
+  
   // Modal preview
   const modal = document.getElementById('previewModal');
   const modalIframe = document.getElementById('modalIframe');
