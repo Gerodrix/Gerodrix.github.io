@@ -30,13 +30,18 @@ export const projects: Project[] = [
   },
   {
     id: 'contit-group', slug: 'contit-group', title: 'ContIT Group', category: 'automation', year: '2026', featured: true,
-    status: { es: 'En producción', en: 'In production' }, image: '/projects/contit-group/cover.webp', demo: 'https://contitgroup.com.ar',
+    status: { es: 'En producción', en: 'In production' }, image: '/projects/contit-group/cover.png', demo: 'https://contitgroup.com.ar',
     shortDescription: { es: 'Landing activa y automatizaciones para una consultora tecnológica.', en: 'Active landing page and automation workflows for a technology consultancy.' },
     description: { es: 'Trabajo dentro del equipo técnico de ContIT Group, combinando la construcción de su landing page con workflows de automatización e integración de modelos de IA.', en: 'Work within ContIT Group’s technical team, combining its landing page with automation workflows and AI-model integrations.' },
     role: { es: 'Desarrollo y mantenimiento de la landing; diseño e implementación de automatizaciones.', en: 'Landing-page development and maintenance; automation design and implementation.' },
     objective: { es: 'Resolver tareas repetitivas del equipo mediante procesos automatizados.', en: 'Reduce repeated team tasks through automated processes.' },
     solution: { es: 'Pipelines con n8n, webhooks e integración de OpenAI y Gemini para ejecutar procesos que antes requerían intervención diaria.', en: 'n8n pipelines, webhooks, and OpenAI/Gemini integrations to run processes that previously needed daily intervention.' },
     technologies: ['React', 'n8n', 'OpenAI API', 'Google Gemini', 'Webhooks'],
+    gallery: [
+      { src: '/projects/contit-group/ai-services.png', alt: { es: 'Sección de servicios de inteligencia artificial de ContIT Group', en: 'ContIT Group artificial intelligence services section' } },
+      { src: '/projects/contit-group/process.png', alt: { es: 'Sección de proceso de trabajo de ContIT Group', en: 'ContIT Group work process section' } },
+      { src: '/projects/contit-group/contact.png', alt: { es: 'Sección de contacto de ContIT Group', en: 'ContIT Group contact section' } },
+    ],
   },
   {
     id: 'ogam', slug: 'ogam', title: 'Ogam', category: 'game-development', year: '2026', featured: true,
