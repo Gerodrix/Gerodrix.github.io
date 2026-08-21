@@ -1,6 +1,6 @@
 export type Locale = 'es' | 'en'
 export type Localized = Record<Locale, string>
-export type ProjectCategory = 'web-development' | 'game-development' | 'automation' | 'tools' | 'other'
+export type ProjectCategory = 'web-development' | 'game-development' | 'automation' | 'qa-testing' | 'tools' | 'other'
 
 export interface Project {
   id: string; slug: string; title: string; category: ProjectCategory; year: string; status: Localized

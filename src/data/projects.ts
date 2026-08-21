@@ -4,10 +4,20 @@ export const categoryLabels: Record<ProjectCategory | 'all', Localized> = {
   all: { es: 'Todos', en: 'All' },
   'web-development': { es: 'Desarrollo web', en: 'Web development' },
   'game-development': { es: 'Videojuegos', en: 'Game development' },
-  automation: { es: 'Automatización', en: 'Automation' }, tools: { es: 'Herramientas', en: 'Tools' }, other: { es: 'Otros', en: 'Other' },
+  automation: { es: 'Automatización', en: 'Automation' }, 'qa-testing': { es: 'QA & Testing', en: 'QA & Testing' }, tools: { es: 'Herramientas', en: 'Tools' }, other: { es: 'Otros', en: 'Other' },
 }
 
 export const projects: Project[] = [
+  {
+    id: 'qa-ai-pipeline', slug: 'qa-ai-pipeline', title: 'QA AI Pipeline', category: 'qa-testing', year: '2026', featured: false,
+    status: { es: 'Código público', en: 'Public code' }, github: 'https://github.com/Gerodrix/qa-ai-pipeline',
+    shortDescription: { es: 'Pipeline de QA que combina IA, validación de selectores y automatización de pruebas.', en: 'QA pipeline combining AI, selector validation, and test automation.' },
+    description: { es: 'Pipeline de automatización de QA que genera casos de prueba con un LLM, valida selectores antes de ejecutar y corre pruebas con Playwright.', en: 'QA automation pipeline that generates test cases with an LLM, validates selectors before execution, and runs tests with Playwright.' },
+    role: { es: 'Desarrollo de un pipeline de automatización de QA con IA.', en: 'Development of an AI-powered QA automation pipeline.' },
+    objective: { es: 'Combinar generación asistida por IA con validaciones previas a la ejecución para reducir errores en el flujo de pruebas.', en: 'Combine AI-assisted generation with pre-execution checks to reduce errors in the testing workflow.' },
+    solution: { es: 'Node.js y TypeScript para el pipeline; Playwright para la ejecución; n8n y Slack para orquestar alertas.', en: 'Node.js and TypeScript for the pipeline; Playwright for execution; n8n and Slack to orchestrate alerts.' },
+    technologies: ['TypeScript', 'Node.js', 'Playwright', 'LLM', 'n8n', 'Slack'],
+  },
   {
     id: 'contit-group', slug: 'contit-group', title: 'ContIT Group', category: 'automation', year: '2026', featured: true,
     status: { es: 'En producción', en: 'In production' }, image: '/projects/contit-group/cover.webp', demo: 'https://contitgroup.com.ar',

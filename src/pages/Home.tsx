@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, ExternalLink, Mail } from 'lucide-react'
+import { ArrowDown, ArrowRight, ExternalLink, GitBranch, ListChecks, Mail, ShieldCheck } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ContactForm } from '../components/ContactForm'
@@ -7,6 +7,7 @@ import { Footer } from '../components/Footer'
 import { ProjectCard } from '../components/ProjectCard'
 import { Reveal } from '../components/Reveal'
 import { SectionHeading } from '../components/SectionHeading'
+import { SkillIcon } from '../components/SkillIcon'
 import { education } from '../data/education'
 import { text } from '../data/i18n'
 import { categoryLabels, projects } from '../data/projects'
@@ -25,7 +26,9 @@ export function Home() {
 
     <section id="about" className="section section--about"><div className="container about-grid"><Reveal className="about-visual"><div className="about-monogram">GO</div><div className="about-stamp">creative<br />developer</div><div className="about-dots" /></Reveal><Reveal className="about-content" delay={0.1}><SectionHeading eyebrow={t('aboutKicker')} title={t('aboutTitle')} /><p>{t('aboutOne')}</p><p>{t('aboutTwo')}</p><dl className="fact-list"><div><dt>{t('currently')}</dt><dd>{t('studying')}</dd></div><div><dt>{t('location')}</dt><dd>{t('buenosAires')}</dd></div><div><dt>{t('availability')}</dt><dd>{t('remote')}</dd></div><div><dt>{t('focus')}</dt><dd>{t('focusValue')}</dd></div></dl></Reveal></div></section>
 
-    <section id="skills" className="section section--tint"><div className="container"><Reveal><SectionHeading eyebrow={t('skillsKicker')} title={t('skillsTitle')} /><p className="section-intro">{t('skillsNote')}</p></Reveal><div className="skills-grid">{skillGroups.map((group, index) => <Reveal key={group.id} delay={index * 0.06}><article className="skill-group"><h3>{text(locale, group.label)}</h3><div>{group.skills.map(skill => <span key={skill}>{skill}</span>)}</div></article></Reveal>)}</div></div></section>
+    <section id="skills" className="section section--tint"><div className="container"><Reveal><SectionHeading eyebrow={t('skillsKicker')} title={t('skillsTitle')} /><p className="section-intro">{t('skillsNote')}</p></Reveal><div className="skills-grid">{skillGroups.map((group, index) => <Reveal key={group.id} delay={index * 0.06}><article className="skill-group"><div className="skill-group__heading"><span className="skill-group__icon"><SkillIcon name={group.id} group /></span><h3>{text(locale, group.label)}</h3></div><div>{group.skills.map(skill => <span className="skill-chip" key={skill}><SkillIcon name={skill} />{skill}</span>)}</div></article></Reveal>)}</div></div></section>
+
+    <section className="section section--qa"><div className="container qa-layout"><Reveal className="qa-copy"><SectionHeading eyebrow={t('qaKicker')} title={t('qaTitle')} /><p>{t('qaText')}</p><a className="button button--dark" href="https://github.com/Gerodrix/qa-ai-pipeline" target="_blank" rel="noreferrer"><GitBranch size={17} />{t('viewGithub')}</a></Reveal><Reveal className="qa-panel" delay={0.1}><div className="qa-panel__ornament" aria-hidden="true" /><div className="qa-panel__top"><span className="qa-panel__mark"><ShieldCheck size={27} /></span><p>QA AI PIPELINE</p><span>2026</span></div><div className="qa-flow"><article><ListChecks aria-hidden="true" /><h3>{t('qaTestCases')}</h3><p>{t('qaTestCasesText')}</p></article><article><ShieldCheck aria-hidden="true" /><h3>{t('qaGuardrails')}</h3><p>{t('qaGuardrailsText')}</p></article><article><GitBranch aria-hidden="true" /><h3>{t('qaExecution')}</h3><p>{t('qaExecutionText')}</p></article></div></Reveal></div></section>
 
     <section id="projects" className="section"><div className="container"><Reveal><SectionHeading eyebrow={t('featuredKicker')} title={t('featuredTitle')} /></Reveal><div className="featured-grid">{featured.map((project, index) => <Reveal key={project.id} delay={index * 0.08} className={index === 0 ? 'featured-grid__lead' : ''}><ProjectCard project={project} featured /></Reveal>)}</div></div></section>
 
