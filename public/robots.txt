@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gerodrix.github.io/sitemap.xml

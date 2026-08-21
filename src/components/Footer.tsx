@@ -1,0 +1,3 @@
+import { ArrowUpRight, Mail } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
+export function Footer() { const { t } = useLanguage(); return <footer className="footer"><div><a className="brand" href="/"><span>GO</span><small>developer</small></a><p>{t('footerTagline')}</p></div><div className="footer-links"><a href="https://github.com/Gerodrix" target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={14} /></a><a href="https://www.linkedin.com/in/geronimo-odriozola/" target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight size={14} /></a><a href="mailto:odriozolageronimo@gmail.com"><Mail size={17} />Email</a></div><small>© {new Date().getFullYear()} Gerónimo Odriozola · {t('copyright')}</small></footer> }

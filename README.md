@@ -1,58 +1,31 @@
-# Geronimo Odriozola — Portfolio
+# Gerónimo Odriozola — Portfolio
 
-Portfolio personal de Game Developer Jr. construido con React (CDN) + Garden OS design system.
+Portfolio estático construido con React, Vite y TypeScript. El diseño light toma un lenguaje editorial cálido, con foco en desarrollo web, automatización, IA y videojuegos.
 
-🌐 **Live:** https://Gerodrix.github.io
-
-## Stack técnico del portfolio
-
-- React 18 via CDN (sin bundler, un solo `index.html`)
-- Babel standalone para JSX en browser
-- Garden OS CSS design system (paleta cozy parchment/musgo)
-- Sin dependencias de npm
-
-## Features
-
-- 🎨 Hero con carousel de proyectos (swipe/drag/teclado/thumbnails)
-- 🪟 Widgets OS draggables en el hero (status.board / core.tools / project.map)
-- 🌱 Easter egg al colocar los 3 widgets en sus zonas
-- 🌙 Toggle dark/light mode
-- 🌐 Trilingüe: ES / EN / PT
-- 📄 Descarga de CV en 3 idiomas
-- 🔍 Scroll reveal en secciones
-- 📱 Responsive (mobile first)
-
-## Proyectos incluidos
-
-1. **Dungeon Crawler 2D** — Unity · C# · Procedural BSP
-2. **Plataformero 3D** — Godot 4 · GDScript · Blender
-3. **Gym Management Sim** — Unity · UI Toolkit · Game Jam
-4. **Casa y Ritmo** — Unity · Isométrico · Cozy (en desarrollo)
-5. **OGAM** — Godot · Pixel Art · Game Jam colaboración
-
-## Cómo subir cambios
+## Desarrollo
 
 ```bash
-# En GitHub Desktop:
-# 1. Editar index.html
-# 2. Commit con mensaje descriptivo
-# 3. Push to origin main
-# GitHub Pages publica automáticamente en ~1 minuto
+npm install
+npm run dev
+npm run build
 ```
 
-## Cómo agregar screenshots a los sliders
+## Contenido
 
-En `index.html`, buscar el proyecto en `const PROJECTS` y agregar `img:` al slide:
+El contenido se mantiene separado de la interfaz:
 
-```js
-slides:[
-  { img: "./screenshots/dungeon-01.png", label: "Gameplay" },
-  { icon:"🗡️", color:"#2a3a22", label:"Placeholder" },
-]
-```
+- `src/data/projects.ts`: proyectos, categorías, imágenes, links y detalle.
+- `src/data/skills.ts`: habilidades por categoría.
+- `src/data/experience.ts`: experiencia laboral.
+- `src/data/education.ts`: formación.
+- `src/data/i18n.ts`: textos en español e inglés.
 
-Subir las imágenes a una carpeta `screenshots/` en el repo.
+Para agregar un proyecto, agregá sus imágenes en `public/projects/<slug>/` y un objeto a `projects.ts`. Las cards, filtros y ruta `/projects/:slug` se actualizan automáticamente.
 
----
+## Formulario de contacto
 
-*Geronimo Odriozola · Buenos Aires · 2025*
+El formulario está listo para Formspree. Copiá `.env.example` a `.env.local` y definí `VITE_FORMSPREE_ENDPOINT`. Sin esa variable, la UI muestra un aviso claro y mantiene el enlace directo al email.
+
+## GitHub Pages
+
+El workflow `.github/workflows/deploy.yml` compila y publica `dist/` al hacer push a `main`. En el repositorio de GitHub, verificá que **Settings → Pages → Source** esté configurado como **GitHub Actions** la primera vez.
