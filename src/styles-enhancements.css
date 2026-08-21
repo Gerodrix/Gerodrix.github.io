@@ -112,3 +112,21 @@ a.book--gold[href="#about"] span,a.book--moss[href="#projects"] span,a.book--blu
 
 /* The shelf caption belongs beneath the books, never over the window scene. */
 .hero-library .library-note{position:absolute!important;left:0;right:0;bottom:-2px!important;margin:0!important}
+
+/* Full-room hero: the window is the room, with the reading nook on the right. */
+.hero--library{background:var(--paper)!important;isolation:isolate}
+.hero--library:before{content:''!important;display:block!important;position:absolute!important;inset:0!important;z-index:-2!important;mask-image:none!important;background:center/cover no-repeat!important;opacity:1!important}
+[data-theme="mossy"] .hero--library:before{background-image:linear-gradient(90deg,rgba(248,241,226,.13),rgba(248,241,226,.03)),url('/illustrations/hero-window-day.png')!important}
+[data-theme="autumn"] .hero--library:before{background-image:linear-gradient(90deg,rgba(19,10,7,.22),rgba(19,10,7,.04)),url('/illustrations/hero-window-night.png')!important}
+.hero--library:after{content:''!important;display:block!important;position:absolute!important;z-index:0!important;inset:0 auto 0 0!important;left:0!important;width:56%!important;translate:none!important;clip-path:none!important;background:linear-gradient(90deg,color-mix(in srgb,var(--paper) 96%,transparent) 0%,color-mix(in srgb,var(--paper) 86%,transparent) 67%,transparent 100%)!important;opacity:1!important;pointer-events:none}
+.hero-grid--library{position:relative!important;z-index:1!important;grid-template-columns:minmax(0,.88fr) minmax(430px,1.12fr)!important;align-items:center!important;gap:34px!important;min-height:calc(100svh - 74px)!important;padding:50px 0 52px!important;text-align:left!important}
+.hero-grid--library .hero-copy{justify-self:start!important;max-width:520px!important;text-align:left!important}
+.hero-grid--library .eyebrow{justify-content:flex-start!important}
+.hero-grid--library .hero-description{margin-left:0!important;margin-right:0!important}
+.hero-grid--library .hero-actions{justify-content:flex-start!important}
+.hero-library{width:min(620px,100%)!important;height:430px!important;justify-self:end!important;margin:0!important;isolation:isolate!important}
+.hero-library:before,.hero-library:after{display:none!important;content:none!important}
+.book-shelf{left:6%!important;right:6%!important}.shelf-plank{left:2%!important;right:2%!important}.hero-library .library-note{text-align:center!important}
+[data-theme="autumn"] .hero--library:after{background:linear-gradient(90deg,rgba(24,12,8,.93) 0%,rgba(24,12,8,.79) 64%,rgba(24,12,8,.08) 100%)!important}
+@media(max-width:900px){.hero--library:after{width:100%!important;background:linear-gradient(180deg,color-mix(in srgb,var(--paper) 92%,transparent) 0%,color-mix(in srgb,var(--paper) 54%,transparent) 48%,color-mix(in srgb,var(--paper) 28%,transparent) 100%)!important}.hero-grid--library{grid-template-columns:1fr!important;gap:16px!important;padding:44px 0 38px!important;text-align:center!important}.hero-grid--library .hero-copy{justify-self:center!important;text-align:center!important}.hero-grid--library .eyebrow,.hero-grid--library .hero-actions{justify-content:center!important}.hero-grid--library .hero-description{margin-left:auto!important;margin-right:auto!important}.hero-library{justify-self:center!important;width:min(680px,100%)!important;height:334px!important}[data-theme="autumn"] .hero--library:after{background:linear-gradient(180deg,rgba(24,12,8,.9) 0%,rgba(24,12,8,.5) 52%,rgba(24,12,8,.18) 100%)!important}}
+@media(max-width:590px){.hero-grid--library{padding:38px 0 28px!important}.hero-library{height:282px!important;width:100%!important}.book-shelf{left:2%!important;right:2%!important}.shelf-plank{left:0!important;right:0!important}}
