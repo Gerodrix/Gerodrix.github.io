@@ -100,3 +100,6 @@ a.book--gold[href="#about"] span,a.book--moss[href="#projects"] span,a.book--blu
 
 /* Keep the functional marks on a single baseline; retain a restrained corner ornament. */
 .skill-group:after{display:block;right:-20px;top:-20px;width:64px;height:64px;opacity:.26;pointer-events:none}.skill-group__heading{display:flex!important;gap:17px!important;min-height:44px}.skill-group__icon{flex:0 0 42px!important;align-self:center}.skill-group__heading h3{align-self:center;padding-top:1px;line-height:1.08}.skill-group .skill-chip{vertical-align:top}
+
+/* Category headings never wrap around their mark; technology icons keep their full SVG box. */
+.skill-group__heading{flex-wrap:nowrap!important;width:100%}.skill-group__heading h3{flex:1 1 0!important;min-width:0!important}.skill-group .skill-chip{display:inline-flex!important;align-items:center!important;gap:7px!important;min-height:0!important}.skill-chip .skill-icon{display:inline-flex!important;width:18px!important;height:18px!important;min-width:18px!important;flex:0 0 18px!important;align-items:center!important;justify-content:center!important}.skill-chip .skill-icon svg{display:block!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:none!important;max-height:none!important;flex:0 0 18px!important}
