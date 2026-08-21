@@ -24,7 +24,7 @@ Para agregar un proyecto, agregá sus imágenes en `public/projects/<slug>/` y u
 
 ## Formulario de contacto
 
-El formulario está listo para Formspree. Copiá `.env.example` a `.env.local` y definí `VITE_FORMSPREE_ENDPOINT`. Sin esa variable, la UI muestra un aviso claro y mantiene el enlace directo al email.
+El formulario usa la integración oficial de React de Formspree y el endpoint público configurado para el portfolio. El identificador del formulario se mantiene en `src/data/contact.ts`; no requiere backend ni variables de entorno para GitHub Pages.
 
 ## GitHub Pages
 
