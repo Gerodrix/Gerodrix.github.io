@@ -231,19 +231,51 @@ a.book--gold[href="#about"] span,a.book--moss[href="#projects"] span,a.book--blu
   .section--qa{padding:0!important;background:#b9955f!important}
   .section--qa .container.qa-layout{width:100vw!important;max-width:none!important;min-height:0!important;height:auto!important;aspect-ratio:16 / 9!important;background-size:100% 100%!important;background-position:center!important;filter:none!important}
   .qa-copy,.qa-panel{min-height:0!important;height:auto!important}
-  .qa-copy{padding:clamp(84px,8.7vw,168px) clamp(54px,6.5vw,126px) clamp(70px,6.7vw,128px) clamp(72px,9.4vw,180px)!important}
-  .qa-copy:before{top:clamp(66px,7.2vw,138px)!important;left:clamp(72px,9.4vw,180px)!important}.qa-copy:after{right:clamp(48px,5.5vw,104px)!important;top:clamp(55px,5.8vw,112px)!important}
-  .qa-copy .section-heading{margin-top:clamp(24px,2.6vw,50px)!important}.qa-copy .section-heading h2{font-size:clamp(2.75rem,4.05vw,5.1rem)!important;max-width:min(35vw,600px)!important}.qa-copy>p{font-size:clamp(.81rem,1.05vw,1.08rem)!important;max-width:min(32vw,500px)!important;margin:clamp(16px,1.7vw,31px) 0!important}
-  .qa-panel{padding:clamp(84px,8.5vw,163px) clamp(52px,6.9vw,132px) clamp(70px,6.5vw,125px) clamp(57px,7.6vw,145px)!important}
+  .qa-copy{padding:clamp(84px,8.7vw,168px) clamp(60px,5vw,106px) clamp(70px,6.7vw,128px) clamp(145px,15.4vw,300px)!important}
+  .qa-copy:before{top:clamp(66px,7.2vw,138px)!important;left:clamp(145px,15.4vw,300px)!important}.qa-copy:after{right:clamp(48px,5.5vw,104px)!important;top:clamp(55px,5.8vw,112px)!important}
+  .qa-copy .section-heading{margin-top:clamp(24px,2.6vw,50px)!important}.qa-copy .section-heading h2{font-size:clamp(2.55rem,3.35vw,4.25rem)!important;max-width:min(29vw,520px)!important;line-height:.94!important}.qa-copy>p{font-size:clamp(.81rem,1.05vw,1.08rem)!important;max-width:min(26vw,455px)!important;margin:clamp(16px,1.7vw,31px) 0!important}
+  .qa-panel{padding:clamp(84px,8.5vw,163px) clamp(135px,10.8vw,220px) clamp(70px,6.5vw,125px) clamp(85px,8.4vw,165px)!important}
   .qa-panel__top{padding-bottom:clamp(10px,1.1vw,19px)!important}.qa-flow{margin-top:clamp(18px,2vw,34px)!important;padding:clamp(12px,1.2vw,22px)!important;gap:clamp(8px,.9vw,16px)!important}
   .qa-flow article{min-height:clamp(170px,15.3vw,294px)!important;padding:clamp(12px,1.25vw,23px) clamp(11px,1.15vw,21px) clamp(24px,2vw,38px)!important}.qa-flow h3{font-size:clamp(1rem,1.35vw,1.55rem)!important}.qa-flow p{font-size:clamp(.62rem,.75vw,.82rem)!important}.qa-flow article:before{font-size:clamp(.45rem,.53vw,.62rem)!important}
   [data-theme="autumn"] .section--qa{background:#160907!important}[data-theme="autumn"] .section--qa .qa-layout{background-image:url('/illustrations/qa-book-night.png')!important}
+  .qa-copy{padding-left:clamp(145px,15.4vw,300px)!important;padding-right:clamp(60px,5vw,106px)!important}
+  .qa-copy:before{left:clamp(145px,15.4vw,300px)!important}.qa-copy .section-heading h2{max-width:min(29vw,520px)!important;font-size:clamp(2.55rem,3.35vw,4.25rem)!important;line-height:.94!important}.qa-copy>p{max-width:min(26vw,455px)!important}
+  .qa-panel{padding-left:clamp(85px,8.4vw,165px)!important;padding-right:clamp(135px,10.8vw,220px)!important}
+  .qa-flow{padding-left:clamp(13px,1.35vw,26px)!important;padding-right:clamp(13px,1.35vw,26px)!important}.qa-flow article{min-height:clamp(158px,13.2vw,252px)!important}.qa-flow h3{font-size:clamp(.96rem,1.18vw,1.4rem)!important}.qa-flow p{font-size:clamp(.59rem,.68vw,.77rem)!important}
+  .hero-grid--library .hero-copy h1{top:22px!important;font-size:clamp(2.55rem,2.6vw,3.15rem)!important;line-height:.95!important}
+  .hero-grid--library .hero-library{height:420px!important}.hero-grid--library .book-shelf--top{bottom:170px!important;height:120px!important}.hero-grid--library .book-shelf--bottom{bottom:47px!important;height:100px!important}.hero-grid--library .shelf-plank--top{bottom:160px!important}.hero-grid--library .shelf-plank--bottom{bottom:37px!important}
+  .hero-grid--library .hero-copy .hero-description{max-width:470px!important;line-height:1.7!important}.hero-grid--library .hero-copy .hero-actions{gap:15px!important}
+}
+
+/* Ajuste final de composición: márgenes seguros y escala editorial. */
+@media(min-width:901px){
+  .qa-copy{padding-left:clamp(145px,15.4vw,300px)!important;padding-right:clamp(60px,5vw,106px)!important}
+  .qa-copy:before{left:clamp(145px,15.4vw,300px)!important}
+  .qa-copy .section-heading h2{max-width:min(29vw,520px)!important;font-size:clamp(2.55rem,3.35vw,4.25rem)!important;line-height:.94!important}
+  .qa-copy>p{max-width:min(26vw,455px)!important}
+  .qa-panel{padding-left:clamp(85px,8.4vw,165px)!important;padding-right:clamp(135px,10.8vw,220px)!important}
+  .qa-flow{padding-left:clamp(13px,1.35vw,26px)!important;padding-right:clamp(13px,1.35vw,26px)!important}
+  .qa-flow article{min-height:clamp(158px,13.2vw,252px)!important}.qa-flow h3{font-size:clamp(.96rem,1.18vw,1.4rem)!important}.qa-flow p{font-size:clamp(.59rem,.68vw,.77rem)!important}
+  .hero-grid--library .hero-copy h1{top:22px!important;font-size:clamp(2.55rem,2.6vw,3.15rem)!important;line-height:.95!important}
+  .hero-grid--library .hero-library{height:420px!important}.hero-grid--library .book-shelf--top{bottom:170px!important;height:120px!important}.hero-grid--library .book-shelf--bottom{bottom:47px!important;height:100px!important}.hero-grid--library .shelf-plank--top{bottom:160px!important}.hero-grid--library .shelf-plank--bottom{bottom:37px!important}
+  .hero-grid--library .hero-copy .hero-description{max-width:470px!important;line-height:1.7!important}.hero-grid--library .hero-copy .hero-actions{gap:15px!important}
 }
 
 @media(min-width:901px){
   .hero-grid--library .hero-copy .hero-description{bottom:-25px!important}
   .hero-grid--library .hero-copy .hero-actions{bottom:-84px!important}
   .hero-grid--library .scroll-cue{display:none!important}
+}
+
+/* Márgenes de lectura: contenido dentro del papel, no sobre sus cantos. */
+@media(min-width:901px){
+  .qa-copy{padding-left:clamp(145px,15.4vw,300px)!important;padding-right:clamp(60px,5vw,106px)!important}
+  .qa-copy:before{left:clamp(145px,15.4vw,300px)!important}.qa-copy .section-heading h2{max-width:min(29vw,520px)!important;font-size:clamp(2.55rem,3.35vw,4.25rem)!important;line-height:.94!important}.qa-copy>p{max-width:min(26vw,455px)!important}
+  .qa-panel{padding-left:clamp(85px,8.4vw,165px)!important;padding-right:clamp(135px,10.8vw,220px)!important}
+  .qa-flow{padding-left:clamp(13px,1.35vw,26px)!important;padding-right:clamp(13px,1.35vw,26px)!important}.qa-flow article{min-height:clamp(158px,13.2vw,252px)!important}.qa-flow h3{font-size:clamp(.96rem,1.18vw,1.4rem)!important}.qa-flow p{font-size:clamp(.59rem,.68vw,.77rem)!important}
+  .hero-grid--library .hero-copy h1{top:22px!important;font-size:clamp(2.55rem,2.6vw,3.15rem)!important;line-height:.95!important}
+  .hero-grid--library .hero-library{height:420px!important}.hero-grid--library .book-shelf--top{bottom:170px!important;height:120px!important}.hero-grid--library .book-shelf--bottom{bottom:47px!important;height:100px!important}.hero-grid--library .shelf-plank--top{bottom:160px!important}.hero-grid--library .shelf-plank--bottom{bottom:37px!important}
+  .hero-grid--library .hero-copy .hero-description{max-width:470px!important;line-height:1.7!important}.hero-grid--library .hero-copy .hero-actions{gap:15px!important}
 }
 
 /* Las páginas ahora son el propio soporte de la bitácora, no un fondo decorativo. */
@@ -282,10 +314,10 @@ a.book--gold[href="#about"] span,a.book--moss[href="#projects"] span,a.book--blu
   .section--qa{padding:0!important;background:#b9955f!important}
   .section--qa .container.qa-layout{width:100vw!important;max-width:none!important;min-height:0!important;height:auto!important;aspect-ratio:16 / 9!important;background-size:100% 100%!important;background-position:center!important;filter:none!important}
   .qa-copy,.qa-panel{min-height:0!important}
-  .qa-copy{padding:clamp(84px,8.7vw,168px) clamp(54px,6.5vw,126px) clamp(70px,6.7vw,128px) clamp(72px,9.4vw,180px)!important}
-  .qa-copy:before{top:clamp(66px,7.2vw,138px)!important;left:clamp(72px,9.4vw,180px)!important}.qa-copy:after{right:clamp(48px,5.5vw,104px)!important;top:clamp(55px,5.8vw,112px)!important}
-  .qa-copy .section-heading{margin-top:clamp(24px,2.6vw,50px)!important}.qa-copy .section-heading h2{font-size:clamp(2.75rem,4.05vw,5.1rem)!important;max-width:min(35vw,600px)!important}.qa-copy>p{font-size:clamp(.81rem,1.05vw,1.08rem)!important;max-width:min(32vw,500px)!important;margin:clamp(16px,1.7vw,31px) 0!important}
-  .qa-panel{padding:clamp(84px,8.5vw,163px) clamp(52px,6.9vw,132px) clamp(70px,6.5vw,125px) clamp(57px,7.6vw,145px)!important}
+  .qa-copy{padding:clamp(84px,8.7vw,168px) clamp(60px,5vw,106px) clamp(70px,6.7vw,128px) clamp(145px,15.4vw,300px)!important}
+  .qa-copy:before{top:clamp(66px,7.2vw,138px)!important;left:clamp(145px,15.4vw,300px)!important}.qa-copy:after{right:clamp(48px,5.5vw,104px)!important;top:clamp(55px,5.8vw,112px)!important}
+  .qa-copy .section-heading{margin-top:clamp(24px,2.6vw,50px)!important}.qa-copy .section-heading h2{font-size:clamp(2.55rem,3.35vw,4.25rem)!important;max-width:min(29vw,520px)!important;line-height:.94!important}.qa-copy>p{font-size:clamp(.81rem,1.05vw,1.08rem)!important;max-width:min(26vw,455px)!important;margin:clamp(16px,1.7vw,31px) 0!important}
+  .qa-panel{padding:clamp(84px,8.5vw,163px) clamp(135px,10.8vw,220px) clamp(70px,6.5vw,125px) clamp(85px,8.4vw,165px)!important}
   .qa-panel__top{padding-bottom:clamp(10px,1.1vw,19px)!important}.qa-flow{margin-top:clamp(18px,2vw,34px)!important;padding:clamp(12px,1.2vw,22px)!important;gap:clamp(8px,.9vw,16px)!important}
   .qa-flow article{min-height:clamp(170px,15.3vw,294px)!important;padding:clamp(12px,1.25vw,23px) clamp(11px,1.15vw,21px) clamp(24px,2vw,38px)!important}.qa-flow h3{font-size:clamp(1rem,1.35vw,1.55rem)!important}.qa-flow p{font-size:clamp(.62rem,.75vw,.82rem)!important}.qa-flow article:before{font-size:clamp(.45rem,.53vw,.62rem)!important}
   [data-theme="autumn"] .section--qa{background:#160907!important}[data-theme="autumn"] .section--qa .qa-layout{background-image:url('/illustrations/qa-book-night.png')!important}
