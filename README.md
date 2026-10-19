@@ -5,7 +5,7 @@ Portfolio estático construido con React, Vite y TypeScript. El diseño light to
 ## Desarrollo
 
 ```bash
-npm install
+npm ci
 npm run dev
 npm run build
 ```
@@ -22,10 +22,14 @@ El contenido se mantiene separado de la interfaz:
 
 Para agregar un proyecto, agregá sus imágenes en `public/projects/<slug>/` y un objeto a `projects.ts`. Las cards, filtros y ruta `/projects/:slug` se actualizan automáticamente.
 
-## Formulario de contacto
+## Publicación y estado del código
 
-El formulario usa la integración oficial de React de Formspree y el endpoint público configurado para el portfolio. El identificador del formulario se mantiene en `src/data/contact.ts`; no requiere backend ni variables de entorno para GitHub Pages.
+El portfolio público está en [Cloudflare Pages](https://geronimo-odriozola.pages.dev). GitHub Actions instala el lockfile, compila esta rama y conserva un artefacto; no publica el sitio. No debe activarse un despliegue a GitHub Pages para este repositorio.
 
-## GitHub Pages
+Esta rama conserva una versión anterior del frontend. La copia local del portfolio tiene cambios posteriores pendientes de conciliar; el build de esta rama no acredita que corresponda al sitio actual. Esa conciliación debe revisarse en un cambio independiente antes de publicar.
 
-El workflow `.github/workflows/deploy.yml` compila y publica `dist/` al hacer push a `main`. En el repositorio de GitHub, verificá que **Settings → Pages → Source** esté configurado como **GitHub Actions** la primera vez.
+Esta versión incluye un formulario con Formspree configurado en `src/data/contact.ts`. La estructura y el comportamiento de esta rama se documentan como código existente, sin atribuirlos a la versión actual de producción.
+
+## Contribuir
+
+Consultá [CONTRIBUTING.md](CONTRIBUTING.md) para el flujo de ramas, commits, dependencias y validación.
